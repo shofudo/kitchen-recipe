@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026年 春の献立マニュアル</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- ヘッダー -->
+    <header class="header">
+        <div class="container">
+            <h1 class="header-title" id="mainTitle">🌸 2026年 春の献立マニュアル</h1>
+            <div class="header-controls">
+                <!-- 言語切り替えボタン -->
+                <button id="languageToggle" class="btn btn-language">
+                    <span id="currentLanguage">日本語</span> / <span id="otherLanguage">नेपाली</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- メインコンテンツ -->
+    <main class="main-container">
+        <div class="container">
+            <!-- 検索バー -->
+            <div class="search-section">
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    class="search-input" 
+                    placeholder="料理名やカテゴリーで検索..."
+                >
+                <button id="clearSearch" class="btn btn-clear" style="display: none;">✕ クリア</button>
+            </div>
+
+            <!-- タブナビゲーション -->
+            <div class="tabs">
+    <button class="tab-button active" data-tab="menus" id="tabMenus">📋 献立</button>
+    <button class="tab-button" data-tab="recipes" id="tabRecipes">👨‍🍳 レシピ</button>
+</div>
+
+            <!-- 献立セクション -->
+            <div id="menus" class="tab-content active">
+    <div class="menu-selector" id="menuSelector">
+    <button class="menu-select-btn active" onclick="switchMenu(0)" id="menuBtn0">春の極上懐石</button>
+    <button class="menu-select-btn" onclick="switchMenu(1)" id="menuBtn1">連泊献立</button>
+    <button class="menu-select-btn" onclick="switchMenu(2)" id="menuBtn2">リピーター献立</button>
+</div>
+    
+    <div id="menuContent" class="content-area">
+        </div>
+</div>
+
+            <!-- レシピセクション -->
+            <div id="recipes" class="tab-content">
+                <div class="recipe-grid" id="recipeGrid">
+                    <!-- レシピカードがJavaScriptで挿入されます -->
+                </div>
+
+                <!-- レシピ詳細モーダル -->
+                <div id="recipeModal" class="modal">
+                    <div class="modal-content">
+                        <button class="modal-close" id="closeModal">✕</button>
+                        <div id="recipeDetail">
+                            <!-- レシピ詳細がJavaScriptで挿入されます -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 キッチンマニュアル - 令和八年 春</p>
+        </div>
+    </footer>
+
+    <!-- 上に戻るボタン -->
+    <button id="scrollToTop" class="scroll-to-top" title="上に戻る">
+        ↑
+    </button>
+
+    <!-- データとスクリプト -->
+    <script src="menu-data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
