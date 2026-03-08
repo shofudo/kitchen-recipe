@@ -120,7 +120,7 @@ function renderUpdateNotices() {
     const notices = updateNotices.slice(0, 3);
 
     updateNoticeList.innerHTML = notices.map((notice, idx) => {
-        const dateLabel = formatNoticeDate(notice.date);
+        const dateLabel = formatNoticeDate(new Date());
 
         return `
             <li>
