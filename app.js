@@ -5,6 +5,19 @@ let currentLanguage = 'ja'; // 'ja' または 'ne'
 let currentMenuIndex = 0;
 let searchTerm = '';
 
+const updateNotices = [
+    {
+        date: '2026-04-15',
+        ja: '鯛茶漬けの胡麻醤油のレシピを修正しました。',
+        ne: 'मादाइ चाजुकेको तिल-सोया सस रेसिपी संशोधन गरिएको छ।'
+    },
+    {
+        date: '2026-04-15',
+        ja: '苺と蜜柑のシャーベットのレシピを修正しました。',
+        ne: 'स्ट्रबेरी र सुन्तलाको शरबत रेसिपी संशोधन गरिएको छ।'
+    }
+];
+
 // ============================================
 // 初期化
 // ============================================
@@ -15,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
     
     // 初期表示
+    renderUpdateNotices();
     displayMenu(0);
     displayRecipeGrid();
 });
@@ -66,6 +80,48 @@ function setupEventListeners() {
             scrollToTopBtn.classList.remove('show');
         }
     });
+}
+
+
+function formatNoticeDate(dateValue) {
+    if (!dateValue) return '';
+
+    const date = new Date(dateValue);
+    if (Number.isNaN(date.getTime())) {
+        return dateValue;
+    }
+
+    return date.toLocaleDateString(currentLanguage === 'ja' ? 'ja-JP' : 'ne-NP', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+    });
+}
+
+
+function renderUpdateNotices() {
+    const updateNoticeTitle = document.getElementById('updateNoticeTitle');
+    const updateNoticeList = document.getElementById('updateNoticeList');
+
+    if (!updateNoticeTitle || !updateNoticeList) return;
+
+    updateNoticeTitle.textContent = currentLanguage === 'ja'
+        ? '🛠️ 変更のお知らせ / परिवर्तन सूचना'
+        : '🛠️ परिवर्तन सूचना / 変更のお知らせ';
+
+    const notices = updateNotices.slice(0, 3);
+
+    updateNoticeList.innerHTML = notices.map((notice, idx) => {
+        const dateLabel = formatNoticeDate(notice.date);
+
+        return `
+            <li>
+                ${dateLabel ? `<div class="update-date">📅 ${dateLabel}</div>` : ''}
+                <div class="update-ja">${idx + 1}. ${notice.ja}</div>
+                <div class="update-ne">${notice.ne}</div>
+            </li>
+        `;
+    }).join('');
 }
 
 // ============================================
@@ -412,6 +468,7 @@ function toggleLanguage() {
     document.getElementById('menuBtn1').textContent = lang.menu1;
     document.getElementById('menuBtn2').textContent = lang.menu2;
     document.getElementById('searchInput').placeholder = lang.search;
+    renderUpdateNotices();
     
     // bodyクラスの切り替え
     if (currentLanguage === 'ne') {

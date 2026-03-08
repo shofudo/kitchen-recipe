@@ -141,6 +141,59 @@ body {
     box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
 }
 
+
+/* ============================================
+   変更お知らせ
+============================================ */
+.update-notice {
+    background: #fffaf3;
+    border: 2px solid #f4d7a6;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow);
+}
+
+.update-notice-title {
+    color: var(--primary-color);
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.update-notice-list {
+    list-style: none;
+    display: grid;
+    gap: 10px;
+}
+
+.update-notice-list li {
+    background: #ffffff;
+    border-left: 4px solid var(--accent-color);
+    border-radius: 8px;
+    padding: 10px 14px;
+}
+
+.update-ja {
+    font-weight: bold;
+    color: var(--text-dark);
+}
+
+.update-ne {
+    color: var(--text-light);
+    font-style: italic;
+}
+
+
+.update-date {
+    font-size: 0.85rem;
+    color: var(--primary-light);
+    background: #eef3f8;
+    border-radius: 999px;
+    display: inline-block;
+    padding: 3px 10px;
+    margin-bottom: 8px;
+}
+
 /* ============================================
    タブ
 ============================================ */
