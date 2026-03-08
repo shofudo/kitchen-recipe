@@ -5,14 +5,22 @@ let currentLanguage = 'ja'; // 'ja' または 'ne'
 let currentMenuIndex = 0;
 let searchTerm = '';
 
+function getTodayDateString() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
+
 const updateNotices = [
     {
-        date: '2026-04-15',
+        date: getTodayDateString(),
         ja: '鯛茶漬けの胡麻醤油のレシピを修正しました。',
         ne: 'मादाइ चाजुकेको तिल-सोया सस रेसिपी संशोधन गरिएको छ।'
     },
     {
-        date: '2026-04-15',
+        date: getTodayDateString(),
         ja: '苺と蜜柑のシャーベットのレシピを修正しました。',
         ne: 'स्ट्रबेरी र सुन्तलाको शरबत रेसिपी संशोधन गरिएको छ।'
     }
