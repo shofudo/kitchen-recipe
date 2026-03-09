@@ -5,22 +5,17 @@ let currentLanguage = 'ja'; // 'ja' または 'ne'
 let currentMenuIndex = 0;
 let searchTerm = '';
 
-function getTodayDateString() {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const day = String(now.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-}
-
+// 運用ルール:
+// 新しい「変更のお知らせ」は必ず先頭に追加し、date は更新日を 'YYYY-MM-DD' で直接記入してください。
+// これにより、アプリを開いた日ではなく「実際に変更した日」が常に表示されます。
 const updateNotices = [
     {
-        date: getTodayDateString(),
+        date: '2026-03-10',
         ja: '鯛茶漬けの胡麻醤油のレシピを修正しました。',
         ne: 'मादाइ चाजुकेको तिल-सोया सस रेसिपी संशोधन गरिएको छ।'
     },
     {
-        date: getTodayDateString(),
+        date: '2026-03-10',
         ja: '苺と蜜柑のシャーベットのレシピを修正しました。',
         ne: 'स्ट्रबेरी र सुन्तलाको शरबत रेसिपी संशोधन गरिएको छ।'
     }
@@ -94,7 +89,16 @@ function setupEventListeners() {
 function formatNoticeDate(dateValue) {
     if (!dateValue) return '';
 
-    const date = new Date(dateValue);
+    let date;
+
+    // YYYY-MM-DD はローカル日付として扱い、タイムゾーン差で日付がズレるのを防ぐ
+    if (typeof dateValue === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
+        const [year, month, day] = dateValue.split('-').map(Number);
+        date = new Date(year, month - 1, day);
+    } else {
+        date = new Date(dateValue);
+    }
+
     if (Number.isNaN(date.getTime())) {
         return dateValue;
     }
@@ -120,7 +124,7 @@ function renderUpdateNotices() {
     const notices = updateNotices.slice(0, 3);
 
     updateNoticeList.innerHTML = notices.map((notice, idx) => {
-        const dateLabel = formatNoticeDate(new Date());
+        const dateLabel = formatNoticeDate(notice.date);
 
         return `
             <li>
