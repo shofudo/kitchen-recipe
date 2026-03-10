@@ -8,48 +8,56 @@
 }
 
 :root {
-    /* カラーパレット - シンプル＆おしゃれ */
-    --primary-color: #2C3E50;        /* 濃い青グレー */
-    --primary-light: #34495E;        /* 少し明るい青グレー */
-    --accent-color: #E74C3C;         /* アクセントの赤 */
-    --accent-light: #EC7063;         /* 明るい赤 */
-    --bg-color: #ECF0F1;             /* 明るいグレー */
-    --card-bg: #FFFFFF;              /* 白 */
-    --text-dark: #2C3E50;            /* 濃いグレー */
-    --text-light: #7F8C8D;           /* 薄いグレー */
-    --border-color: #BDC3C7;         /* ボーダーグレー */
-    --success-color: #27AE60;        /* 緑（成功） */
-    --shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-    --shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.12);
+    --primary-color: #181b20;
+    --primary-light: #2a2f36;
+    --accent-color: #8a6844;
+    --accent-light: #a07d57;
+    --bg-color: #e7e1d7;
+    --bg-panel: #f4f0e8;
+    --card-bg: #fbf9f4;
+    --text-dark: #202327;
+    --text-light: #666056;
+    --border-color: #c9beb0;
+    --border-strong: #95826b;
+    --success-color: #52614f;
+    --shadow: 0 12px 30px rgba(24, 27, 32, 0.08);
+    --shadow-hover: 0 18px 40px rgba(24, 27, 32, 0.12);
 }
 
 body {
     font-family: 'Hiragino Sans', 'Yu Gothic', 'Meiryo', sans-serif;
-    background-color: var(--bg-color);
+    background:
+        radial-gradient(circle at top left, rgba(138, 104, 68, 0.16), transparent 32%),
+        linear-gradient(180deg, #f2ede3 0%, var(--bg-color) 48%, #ddd4c8 100%);
     color: var(--text-dark);
-    line-height: 1.6;
+    line-height: 1.7;
+    letter-spacing: 0.02em;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 1120px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 24px;
 }
 
 /* ============================================
    ヘッダー
 ============================================ */
 .header {
-    background: var(--primary-color);
+    background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.04), transparent 32%),
+        linear-gradient(180deg, #1d2127 0%, #121519 100%);
     color: white;
-    padding: 20px 0;
-    box-shadow: var(--shadow);
+    padding: 18px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
     position: sticky;
     top: 0;
     z-index: 1000;
+    backdrop-filter: blur(14px);
 }
 
 .header .container {
@@ -61,9 +69,11 @@ body {
 }
 
 .header-title {
-    font-size: 1.8rem;
-    font-weight: bold;
+    font-size: 1.65rem;
+    font-weight: 700;
     margin: 0;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
 }
 
 .header-controls {
@@ -76,13 +86,14 @@ body {
    ボタン
 ============================================ */
 .btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: bold;
+    padding: 11px 18px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: color 0.25s ease, background-color 0.25s ease, border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
     white-space: nowrap;
 }
 
@@ -96,18 +107,20 @@ body {
 }
 
 .btn-language {
-    background-color: white;
-    color: var(--primary-color);
+    background-color: rgba(255, 255, 255, 0.06);
+    color: #f3efe7;
+    border-color: rgba(255, 255, 255, 0.18);
 }
 
 .btn-language:hover {
-    background-color: #f0f0f0;
+    background-color: rgba(255, 255, 255, 0.12);
 }
 
 .btn-clear {
     background-color: var(--accent-color);
     color: white;
-    padding: 8px 16px;
+    border-color: var(--accent-color);
+    padding: 12px 16px;
 }
 
 /* ============================================
@@ -115,49 +128,53 @@ body {
 ============================================ */
 .main-container {
     flex: 1;
-    padding: 30px 0;
+    padding: 36px 0 48px;
 }
 
-/* 検索セクション */
 .search-section {
     display: flex;
-    gap: 10px;
-    margin-bottom: 30px;
+    gap: 12px;
+    margin-bottom: 24px;
     align-items: center;
 }
 
 .search-input {
     flex: 1;
-    padding: 15px 20px;
-    font-size: 1.1rem;
-    border: 2px solid var(--border-color);
-    border-radius: 12px;
-    transition: all 0.3s ease;
+    padding: 15px 18px;
+    font-size: 1rem;
+    color: var(--text-dark);
+    background: rgba(251, 249, 244, 0.9);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
 }
 
 .search-input:focus {
     outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+    background: var(--card-bg);
+    border-color: var(--border-strong);
+    box-shadow: 0 0 0 3px rgba(138, 104, 68, 0.12);
 }
 
-
 /* ============================================
-   変更お知らせ
+   更新通知
 ============================================ */
 .update-notice {
-    background: #fffaf3;
-    border: 2px solid #f4d7a6;
-    border-radius: 12px;
-    padding: 12px 14px;
-    margin-bottom: 18px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.75), rgba(244, 240, 232, 0.9));
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 18px 20px;
+    margin-bottom: 24px;
     box-shadow: var(--shadow);
 }
 
 .update-notice-title {
     color: var(--primary-color);
-    font-size: 1.05rem;
-    margin-bottom: 8px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
 }
 
 .update-notice-list {
@@ -167,41 +184,40 @@ body {
 }
 
 .update-notice-list li {
-    background: #ffffff;
-    border-left: 4px solid var(--accent-color);
-    border-radius: 8px;
-    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.72);
+    border-left: 3px solid var(--accent-color);
+    border-radius: 6px;
+    padding: 12px 14px;
 }
 
 .update-ja {
-    font-weight: bold;
+    font-weight: 700;
     color: var(--text-dark);
 }
 
 .update-ne {
     color: var(--text-light);
-    font-style: italic;
+    font-style: normal;
 }
-
 
 .update-date {
     font-size: 0.8rem;
     color: var(--primary-light);
-    background: #eef3f8;
+    background: #e5ddd2;
     border-radius: 999px;
     display: inline-block;
-    padding: 2px 9px;
-    margin-bottom: 6px;
+    padding: 3px 9px;
+    margin-bottom: 8px;
 }
 
 .update-notice-list .update-ja {
     font-size: 1rem;
-    line-height: 1.3;
+    line-height: 1.4;
 }
 
 .update-notice-list .update-ne {
     font-size: 0.92rem;
-    line-height: 1.3;
+    line-height: 1.4;
 }
 
 /* ============================================
@@ -209,32 +225,32 @@ body {
 ============================================ */
 .tabs {
     display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-    border-bottom: 3px solid var(--border-color);
+    gap: 24px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .tab-button {
-    padding: 15px 30px;
-    font-size: 1.1rem;
-    font-weight: bold;
+    padding: 14px 2px;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
     background: transparent;
     border: none;
-    border-bottom: 3px solid transparent;
+    border-bottom: 2px solid transparent;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: color 0.25s ease, border-color 0.25s ease;
     color: var(--text-light);
-    margin-bottom: -3px;
+    margin-bottom: -1px;
 }
 
 .tab-button:hover {
     color: var(--primary-color);
-    background-color: rgba(76, 175, 80, 0.05);
 }
 
 .tab-button.active {
     color: var(--primary-color);
-    border-bottom-color: var(--primary-color);
+    border-bottom-color: var(--accent-color);
 }
 
 .tab-content {
@@ -250,27 +266,27 @@ body {
 ============================================ */
 .menu-selector {
     display: flex;
-    gap: 15px;
-    margin-bottom: 25px;
+    gap: 12px;
+    margin-bottom: 24px;
     flex-wrap: wrap;
 }
 
 .menu-select-btn {
-    padding: 12px 25px;
-    font-size: 1rem;
-    font-weight: bold;
-    background-color: white;
+    padding: 11px 18px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    background-color: rgba(255, 255, 255, 0.45);
     color: var(--text-dark);
-    border: 2px solid var(--border-color);
-    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.25s ease;
 }
 
 .menu-select-btn:hover {
-    border-color: var(--primary-color);
+    border-color: var(--border-strong);
     color: var(--primary-color);
-    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.72);
 }
 
 .menu-select-btn.active {
@@ -283,69 +299,72 @@ body {
    献立コンテンツ
 ============================================ */
 .content-area {
-    background-color: var(--card-bg);
-    border-radius: 15px;
-    padding: 30px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.76), rgba(251, 249, 244, 0.96));
+    border: 1px solid rgba(149, 130, 107, 0.28);
+    border-radius: 10px;
+    padding: 32px;
     box-shadow: var(--shadow);
 }
 
 .menu-title {
-    font-size: 2rem;
+    font-size: 1.8rem;
     color: var(--primary-color);
-    margin-bottom: 30px;
-    text-align: center;
-    padding-bottom: 15px;
-    border-bottom: 3px solid var(--primary-color);
+    margin-bottom: 28px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border-color);
+    letter-spacing: 0.05em;
 }
 
 .menu-category {
-    margin-bottom: 35px;
+    margin-bottom: 28px;
 }
 
 .category-header {
-    background: var(--primary-color);
-    color: white;
-    padding: 15px 25px;
-    border-radius: 8px;
-    font-size: 1.4rem;
-    font-weight: bold;
-    margin-bottom: 15px;
+    background: transparent;
+    color: var(--primary-color);
+    padding: 0 0 12px;
+    border-radius: 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 14px;
     display: flex;
     align-items: center;
     gap: 10px;
+    border-bottom: 1px solid var(--border-color);
+    letter-spacing: 0.05em;
 }
 
 .category-items {
     display: grid;
-    gap: 12px;
+    gap: 10px;
 }
 
 .menu-item {
-    background-color: var(--card-bg);
-    padding: 15px 20px;
-    border-radius: 8px;
-    border-left: 4px solid var(--accent-color);
-    transition: all 0.3s ease;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    background-color: rgba(255, 255, 255, 0.56);
+    padding: 15px 18px;
+    border-radius: 6px;
+    border: 1px solid rgba(149, 130, 107, 0.22);
+    border-left: 3px solid var(--accent-color);
+    transition: transform 0.25s ease, border-color 0.25s ease, background-color 0.25s ease;
 }
 
 .menu-item:hover {
-    background-color: #f8f9fa;
-    transform: translateX(5px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 255, 255, 0.82);
+    transform: translateX(3px);
+    border-color: rgba(149, 130, 107, 0.38);
 }
 
 .item-name-ja {
-    font-size: 1.2rem;
-    font-weight: bold;
+    font-size: 1.08rem;
+    font-weight: 700;
     color: var(--text-dark);
-    margin-bottom: 5px;
+    margin-bottom: 3px;
 }
 
 .item-name-ne {
-    font-size: 1rem;
+    font-size: 0.95rem;
     color: var(--text-light);
-    font-style: italic;
+    font-style: normal;
 }
 
 /* ============================================
@@ -353,34 +372,35 @@ body {
 ============================================ */
 .recipe-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 25px;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 18px;
 }
 
 .recipe-card {
-    background-color: var(--card-bg);
-    border-radius: 15px;
-    padding: 25px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.75), rgba(247, 243, 236, 0.98));
+    border-radius: 8px;
+    padding: 22px;
     box-shadow: var(--shadow);
     cursor: pointer;
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, background-color 0.25s ease;
+    border: 1px solid rgba(149, 130, 107, 0.24);
 }
 
 .recipe-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-3px);
     box-shadow: var(--shadow-hover);
-    border-color: var(--primary-color);
+    border-color: rgba(138, 104, 68, 0.5);
 }
 
 .recipe-card-title {
-    font-size: 1.5rem;
-    font-weight: bold;
+    font-size: 1.28rem;
+    font-weight: 700;
     color: var(--primary-color);
-    margin-bottom: 10px;
+    margin-bottom: 14px;
     display: flex;
     align-items: center;
     gap: 10px;
+    line-height: 1.45;
 }
 
 .recipe-card-subtitle {
@@ -391,9 +411,18 @@ body {
 
 .recipe-card-info {
     display: flex;
-    gap: 15px;
-    font-size: 0.9rem;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 0.86rem;
     color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.recipe-card-info span {
+    padding: 4px 8px;
+    background: rgba(138, 104, 68, 0.08);
+    border-radius: 999px;
 }
 
 /* ============================================
@@ -406,7 +435,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(16, 18, 22, 0.78);
     z-index: 2000;
     overflow-y: auto;
     padding: 20px;
@@ -421,12 +450,13 @@ body {
 
 .modal-content {
     background-color: var(--card-bg);
-    border-radius: 20px;
+    border-radius: 10px;
     padding: 40px;
     max-width: 800px;
     width: 100%;
     position: relative;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(149, 130, 107, 0.24);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.32);
     margin-bottom: 50px;
 }
 
@@ -434,44 +464,48 @@ body {
     position: absolute;
     top: 15px;
     right: 15px;
-    background-color: var(--accent-color);
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    font-size: 1.5rem;
+    background-color: transparent;
+    color: var(--text-light);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    width: 42px;
+    height: 42px;
+    font-size: 1.2rem;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.25s ease;
 }
 
 .modal-close:hover {
-    background-color: var(--accent-light);
-    transform: rotate(90deg);
+    background-color: rgba(138, 104, 68, 0.08);
+    color: var(--primary-color);
+    transform: none;
 }
 
 .recipe-detail-title {
-    font-size: 2rem;
+    font-size: 1.9rem;
     color: var(--primary-color);
-    margin-bottom: 10px;
+    margin-bottom: 14px;
+    line-height: 1.4;
 }
 
 .recipe-detail-subtitle {
-    font-size: 1.2rem;
+    font-size: 1.05rem;
     color: var(--text-light);
     margin-bottom: 30px;
 }
 
 .recipe-section {
-    margin-bottom: 30px;
+    margin-bottom: 28px;
 }
 
 .recipe-section-title {
-    font-size: 1.5rem;
+    font-size: 1.1rem;
     color: var(--primary-color);
-    margin-bottom: 15px;
+    margin-bottom: 14px;
     padding-bottom: 10px;
-    border-bottom: 2px solid var(--primary-color);
+    border-bottom: 1px solid var(--border-color);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
 }
 
 .recipe-list {
@@ -479,24 +513,24 @@ body {
 }
 
 .recipe-list li {
-    padding: 12px 15px;
-    background-color: var(--card-bg);
+    padding: 14px 16px;
+    background-color: rgba(255, 255, 255, 0.72);
     margin-bottom: 10px;
-    border-radius: 8px;
-    border-left: 4px solid var(--success-color);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    border-radius: 6px;
+    border-left: 3px solid var(--success-color);
+    border: 1px solid rgba(149, 130, 107, 0.16);
 }
 
 .recipe-text-ja {
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: var(--text-dark);
-    margin-bottom: 5px;
+    margin-bottom: 4px;
 }
 
 .recipe-text-ne {
-    font-size: 0.95rem;
+    font-size: 0.92rem;
     color: var(--text-light);
-    font-style: italic;
+    font-style: normal;
 }
 
 /* ============================================
@@ -508,13 +542,13 @@ body {
     right: 30px;
     width: 50px;
     height: 50px;
-    background-color: var(--accent-color);
+    background-color: var(--primary-color);
     color: white;
     border: none;
-    border-radius: 50%;
-    font-size: 1.5rem;
+    border-radius: 8px;
+    font-size: 1.1rem;
     cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
     transition: all 0.3s ease;
     opacity: 0;
     visibility: hidden;
@@ -527,9 +561,9 @@ body {
 }
 
 .scroll-to-top:hover {
-    background-color: var(--accent-light);
-    transform: translateY(-5px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    background-color: var(--primary-light);
+    transform: translateY(-3px);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.2);
 }
 
 .scroll-to-top:active {
@@ -540,11 +574,12 @@ body {
    フッター
 ============================================ */
 .footer {
-    background-color: var(--text-dark);
-    color: white;
+    background-color: #15181c;
+    color: rgba(255, 255, 255, 0.72);
     text-align: center;
-    padding: 20px 0;
+    padding: 18px 0;
     margin-top: auto;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 /* ============================================
@@ -558,7 +593,7 @@ body {
 .lang-ne .item-name-ne,
 .lang-ne .recipe-text-ne {
     display: block;
-    font-size: 1.2rem;
+    font-size: 1.05rem;
     font-style: normal;
 }
 
@@ -567,9 +602,9 @@ body {
 ============================================ */
 @media print {
     body {
-        background-color: white;
+        background: white;
     }
-    
+
     .header-controls,
     .search-section,
     .tabs,
@@ -578,7 +613,7 @@ body {
     .scroll-to-top {
         display: none !important;
     }
-    
+
     .header {
         position: static;
         box-shadow: none;
@@ -586,24 +621,25 @@ body {
         color: black;
         border-bottom: 2px solid black;
     }
-    
+
     .menu-item {
         break-inside: avoid;
         page-break-inside: avoid;
     }
-    
+
     .modal {
         display: block !important;
         position: static;
         background: none;
         padding: 0;
     }
-    
+
     .modal-content {
         box-shadow: none;
+        border: none;
         padding: 20px;
     }
-    
+
     .modal-close {
         display: none;
     }
@@ -616,64 +652,69 @@ body {
     .header-title {
         font-size: 1.4rem;
     }
-    
+
     .tabs {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
+        gap: 18px;
     }
-    
+
     .tab-button {
-        padding: 12px 20px;
+        padding: 12px 0;
         font-size: 1rem;
     }
-    
+
     .menu-selector {
         flex-direction: column;
     }
-    
+
     .menu-select-btn {
         width: 100%;
     }
-    
+
     .content-area {
-        padding: 20px;
+        padding: 24px 20px;
     }
-    
+
     .recipe-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .modal-content {
-        padding: 25px;
+        padding: 28px 24px;
     }
-    
+
     .item-name-ja {
-        font-size: 1.1rem;
+        font-size: 1.02rem;
     }
 }
 
 @media (max-width: 480px) {
+    .container {
+        padding: 0 16px;
+    }
+
     .header-title {
-        font-size: 1.2rem;
+        font-size: 1.18rem;
     }
-    
+
     .btn {
-        padding: 8px 15px;
-        font-size: 0.9rem;
+        padding: 9px 14px;
+        font-size: 0.88rem;
     }
-    
+
     .search-input {
         padding: 12px 15px;
         font-size: 1rem;
     }
-    
+
     .content-area {
-        padding: 15px;
+        padding: 20px 16px;
     }
-    
+
     .category-header {
-        font-size: 1.2rem;
-        padding: 12px 18px;
+        font-size: 1.05rem;
+        padding-bottom: 10px;
     }
 }
 
@@ -684,13 +725,12 @@ body {
 .search-input:focus,
 .tab-button:focus,
 .menu-select-btn:focus {
-    outline: 3px solid var(--primary-color);
+    outline: 3px solid rgba(138, 104, 68, 0.32);
     outline-offset: 2px;
 }
 
-/* ハイライト表示 */
 .highlight {
-    background-color: #FFEB3B;
-    padding: 2px 4px;
+    background-color: rgba(138, 104, 68, 0.16);
+    padding: 1px 4px;
     border-radius: 3px;
 }

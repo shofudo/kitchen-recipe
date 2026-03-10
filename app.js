@@ -118,8 +118,8 @@ function renderUpdateNotices() {
     if (!updateNoticeTitle || !updateNoticeList) return;
 
     updateNoticeTitle.textContent = currentLanguage === 'ja'
-        ? '🛠️ 変更のお知らせ / परिवर्तन सूचना'
-        : '🛠️ परिवर्तन सूचना / 変更のお知らせ';
+        ? '変更のお知らせ / परिवर्तन सूचना'
+        : 'परिवर्तन सूचना / 変更のお知らせ';
 
     const notices = updateNotices.slice(0, 3);
 
@@ -128,7 +128,7 @@ function renderUpdateNotices() {
 
         return `
             <li>
-                ${dateLabel ? `<div class="update-date">📅 ${dateLabel}</div>` : ''}
+                ${dateLabel ? `<div class="update-date">${dateLabel}</div>` : ''}
                 <div class="update-ja">${idx + 1}. ${notice.ja}</div>
                 <div class="update-ne">${notice.ne}</div>
             </li>
@@ -187,7 +187,6 @@ function displayMenu(index) {
         html += `
             <div class="menu-category">
                 <div class="category-header">
-                    <span>🍽️</span>
                     <span>${categoryName}</span>
                 </div>
                 <div class="category-items">
@@ -236,12 +235,10 @@ function displayRecipeGrid() {
             
             html += `
                 <div class="recipe-card" onclick="showRecipeDetail(${index})">
-                    <div class="recipe-card-title">
-                        👨‍🍳 ${highlightText(title)}
-                    </div>
+                    <div class="recipe-card-title">${highlightText(title)}</div>
                     <div class="recipe-card-info">
-                        <span>📝 材料: ${recipe.ingredients.length}項目</span>
-                        <span>📋 手順: ${recipe.instructions.length}ステップ</span>
+                        <span>${currentLanguage === 'ja' ? '材料' : 'सामग्री'}: ${recipe.ingredients.length}</span>
+                        <span>${currentLanguage === 'ja' ? '手順' : 'विधि'}: ${recipe.instructions.length}</span>
                     </div>
                 </div>
             `;
@@ -271,7 +268,7 @@ function showRecipeDetail(index) {
         const label = currentLanguage === 'ja' ? recipe.calc_base_label_ja : recipe.calc_base_label_ne;
         html += `
             <div class="calc-section" style="background: #f0f7ff; padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 2px solid #3498db;">
-                <label style="font-weight: bold; display: block; margin-bottom: 5px;">⚖️ ${label}</label>
+                <label style="font-weight: bold; display: block; margin-bottom: 5px;">${label}</label>
                 <input type="number" id="baseWeight" placeholder="例: 1000" style="width: 100%; padding: 10px; font-size: 1.2rem; border-radius: 5px; border: 1px solid #ccc;" oninput="updateCalculations(${index})">
             </div>
         `;
@@ -281,7 +278,7 @@ function showRecipeDetail(index) {
     if (recipe.ingredients && recipe.ingredients.length > 0) {
         html += `
             <div class="recipe-section">
-                <h3 class="recipe-section-title">📝 ${currentLanguage === 'ja' ? '材料' : 'सामग्री'}</h3>
+                <h3 class="recipe-section-title">${currentLanguage === 'ja' ? '材料' : 'सामग्री'}</h3>
                 <ul class="recipe-list">
         `;
         
@@ -306,7 +303,7 @@ function showRecipeDetail(index) {
     if (recipe.instructions && recipe.instructions.length > 0) {
         html += `
             <div class="recipe-section">
-                <h3 class="recipe-section-title">👨‍🍳 ${currentLanguage === 'ja' ? '作り方' : 'विधि'}</h3>
+                <h3 class="recipe-section-title">${currentLanguage === 'ja' ? '作り方' : 'विधि'}</h3>
                 <ul class="recipe-list">
         `;
         recipe.instructions.forEach(item => {
@@ -324,7 +321,7 @@ function showRecipeDetail(index) {
     if (recipe.notes && recipe.notes.length > 0) {
         html += `
             <div class="recipe-section" style="background: #fff5f5; padding: 10px; border-radius: 10px;">
-                <h3 class="recipe-section-title" style="color: #c0392b; border-bottom-color: #c0392b;">⚠️ ${currentLanguage === 'ja' ? '補足' : 'नोट'}</h3>
+                <h3 class="recipe-section-title" style="color: #7f3428; border-bottom-color: #bda38c;">${currentLanguage === 'ja' ? '補足' : 'नोट'}</h3>
                 <ul class="recipe-list">
         `;
         recipe.notes.forEach(item => {
@@ -453,18 +450,18 @@ function toggleLanguage() {
     // UIパーツの翻訳
     const ui = {
         ja: {
-            title: "🌸 2026年 春の献立マニュアル",
-            tabMenus: "📋 献立",
-            tabRecipes: "👨‍🍳 レシピ",
+            title: "2026年 春の献立マニュアル",
+            tabMenus: "献立",
+            tabRecipes: "レシピ",
             menu0: "春の極上懐石",
             menu1: "連泊献立",
             menu2: "リピーター献立",
             search: "料理名やカテゴリーで検索..."
         },
         ne: {
-            title: "🌸 सन् २०२६ वसन्तकालीन मेनु म्यानुअल",
-            tabMenus: "📋 मेनु",
-            tabRecipes: "👨‍🍳 रेसिपी",
+            title: "सन् २०२६ वसन्तकालीन मेनु म्यानुअल",
+            tabMenus: "मेनु",
+            tabRecipes: "रेसिपी",
             menu0: "विशेष काइसेकी",
             menu1: "लगातार बसाई",
             menu2: "पुनरावर्ती",
