@@ -451,8 +451,8 @@ function toggleLanguage() {
     const ui = {
         ja: {
             title: "2026年 春の献立マニュアル",
-            tabMenus: "献立",
-            tabRecipes: "レシピ",
+            tabMenus: "春の献立",
+            tabRecipes: "春のレシピ",
             menu0: "春の極上懐石",
             menu1: "連泊献立",
             menu2: "リピーター献立",
