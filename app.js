@@ -450,9 +450,9 @@ function toggleLanguage() {
     // UIパーツの翻訳
     const ui = {
         ja: {
-            title: "2026年 春の献立マニュアル",
-            tabMenus: "春の献立",
-            tabRecipes: "春のレシピ",
+            title: "キッチンマニュアル",
+            tabMenus: "2026春の献立",
+            tabRecipes: "2026春のレシピ",
             menu0: "春の極上懐石",
             menu1: "連泊献立",
             menu2: "リピーター献立",
