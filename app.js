@@ -4,6 +4,7 @@
 let currentLanguage = 'ja'; // 'ja' または 'ne'
 let currentMenuIndex = 0;
 let searchTerm = '';
+let showAllUpdates = false;
 
 // 運用ルール:
 // 新しい「変更のお知らせ」は必ず先頭に追加し、date は更新日を 'YYYY-MM-DD' で直接記入してください。
@@ -32,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // 初期表示
     renderUpdateNotices();
+    renderUpdateBanner();
     displayMenu(0);
     displayRecipeGrid();
 });
@@ -55,6 +57,14 @@ function setupEventListeners() {
     searchInput.addEventListener('input', handleSearch);
     
     document.getElementById('clearSearch').addEventListener('click', clearSearch);
+
+    const updateNoticeToggle = document.getElementById('updateNoticeToggle');
+    if (updateNoticeToggle) {
+        updateNoticeToggle.addEventListener('click', () => {
+            showAllUpdates = !showAllUpdates;
+            renderUpdateNotices();
+        });
+    }
     
     // モーダルを閉じる
     document.getElementById('closeModal').addEventListener('click', closeModal);
@@ -65,6 +75,14 @@ function setupEventListeners() {
             closeModal();
         }
     });
+
+    const updateBanner = document.getElementById('updateBanner');
+    if (updateBanner) {
+        updateBanner.addEventListener('click', () => {
+            switchTab('updates');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
     
     // 上に戻るボタン
     const scrollToTopBtn = document.getElementById('scrollToTop');
@@ -114,6 +132,7 @@ function formatNoticeDate(dateValue) {
 function renderUpdateNotices() {
     const updateNoticeTitle = document.getElementById('updateNoticeTitle');
     const updateNoticeList = document.getElementById('updateNoticeList');
+    const updateNoticeToggle = document.getElementById('updateNoticeToggle');
 
     if (!updateNoticeTitle || !updateNoticeList) return;
 
@@ -121,7 +140,8 @@ function renderUpdateNotices() {
         ? '変更のお知らせ / परिवर्तन सूचना'
         : 'परिवर्तन सूचना / 変更のお知らせ';
 
-    const notices = updateNotices.slice(0, 3);
+    const visibleCount = showAllUpdates ? updateNotices.length : 3;
+    const notices = updateNotices.slice(0, visibleCount);
 
     updateNoticeList.innerHTML = notices.map((notice, idx) => {
         const dateLabel = formatNoticeDate(notice.date);
@@ -134,6 +154,41 @@ function renderUpdateNotices() {
             </li>
         `;
     }).join('');
+
+    if (!updateNoticeToggle) return;
+
+    if (updateNotices.length <= 3) {
+        updateNoticeToggle.hidden = true;
+        return;
+    }
+
+    updateNoticeToggle.hidden = false;
+    updateNoticeToggle.textContent = showAllUpdates
+        ? (currentLanguage === 'ja' ? '閉じる' : 'Close')
+        : (currentLanguage === 'ja' ? 'もっと見る' : 'View more');
+}
+
+function renderUpdateBanner() {
+    const updateBanner = document.getElementById('updateBanner');
+    const updateBannerLabel = document.getElementById('updateBannerLabel');
+    const updateBannerDate = document.getElementById('updateBannerDate');
+    const updateBannerText = document.getElementById('updateBannerText');
+    const updateBannerAction = document.getElementById('updateBannerAction');
+
+    if (!updateBanner || !updateBannerLabel || !updateBannerDate || !updateBannerText || !updateBannerAction) return;
+
+    const latestNotice = updateNotices[0];
+
+    if (!latestNotice) {
+        updateBanner.hidden = true;
+        return;
+    }
+
+    updateBanner.hidden = false;
+    updateBannerLabel.textContent = currentLanguage === 'ja' ? '更新' : 'UPDATE';
+    updateBannerDate.textContent = formatNoticeDate(latestNotice.date);
+    updateBannerText.textContent = currentLanguage === 'ja' ? latestNotice.ja : latestNotice.ne;
+    updateBannerAction.textContent = currentLanguage === 'ja' ? '一覧を見る' : 'View all';
 }
 
 // ============================================
@@ -478,6 +533,7 @@ function toggleLanguage() {
     document.getElementById('menuBtn2').textContent = lang.menu2;
     document.getElementById('searchInput').placeholder = lang.search;
     renderUpdateNotices();
+    renderUpdateBanner();
     
     // bodyクラスの切り替え
     if (currentLanguage === 'ne') {
