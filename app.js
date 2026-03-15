@@ -392,7 +392,7 @@ function showRecipeDetail(index) {
     
     detailDiv.innerHTML = html;
     modal.classList.add('active');
-    modal.scrollTop = 0;
+    document.querySelector('.modal-content').scrollTop = 0;
 }
 
 // モーダルを閉じる
