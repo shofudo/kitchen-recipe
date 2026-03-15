@@ -525,6 +525,7 @@ body {
     justify-content: center;
     align-items: center;
     overflow: hidden;
+    padding: calc(env(safe-area-inset-top) + 12px) 0 calc(env(safe-area-inset-bottom) + 12px);
     z-index: 2000;
 }
 
@@ -541,8 +542,8 @@ body {
     position: relative;
     border: 1px solid rgba(149, 130, 107, 0.24);
     box-shadow: 0 24px 60px rgba(0, 0, 0, 0.32);
-    margin-bottom: 50px;
-    max-height: 90vh;
+    margin: 0;
+    max-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 24px);
     overflow-y: auto;
 }
 
@@ -870,6 +871,7 @@ body {
     .modal-content {
         padding: 28px 20px 24px;
         border-radius: 18px 18px 0 0;
+        max-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 24px);
         min-height: calc(100vh - 24px);
         margin-bottom: 0;
     }
@@ -1080,15 +1082,16 @@ body {
     }
 
     .modal {
-        padding: 12px 0 0;
+        padding: calc(env(safe-area-inset-top) + 12px) 0 0;
     }
 
     .modal.active {
         align-items: flex-end;
-        padding-top: 12px;
+        padding-top: calc(env(safe-area-inset-top) + 12px);
     }
 
     .modal-content {
+        max-height: calc(100dvh - env(safe-area-inset-top) - 12px);
         padding: 20px 14px calc(18px + env(safe-area-inset-bottom));
     }
 
