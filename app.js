@@ -525,9 +525,11 @@ function toggleLanguage() {
     };
 
     const lang = ui[currentLanguage];
+    const tabUpdatesLabel = currentLanguage === 'ja' ? '変更のお知らせ' : 'परिवर्तन सूचना';
     document.getElementById('mainTitle').textContent = lang.title;
     document.getElementById('tabMenus').textContent = lang.tabMenus;
     document.getElementById('tabRecipes').textContent = lang.tabRecipes;
+    document.getElementById('tabUpdates').textContent = tabUpdatesLabel;
     document.getElementById('menuBtn0').textContent = lang.menu0;
     document.getElementById('menuBtn1').textContent = lang.menu1;
     document.getElementById('menuBtn2').textContent = lang.menu2;
