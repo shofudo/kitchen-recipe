@@ -291,10 +291,6 @@ function displayRecipeGrid() {
             html += `
                 <div class="recipe-card" onclick="showRecipeDetail(${index})">
                     <div class="recipe-card-title">${highlightText(title)}</div>
-                    <div class="recipe-card-info">
-                        <span>${currentLanguage === 'ja' ? '材料' : 'सामग्री'}: ${recipe.ingredients.length}</span>
-                        <span>${currentLanguage === 'ja' ? '手順' : 'विधि'}: ${recipe.instructions.length}</span>
-                    </div>
                 </div>
             `;
         }
