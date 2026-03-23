@@ -395,64 +395,6 @@ function showRecipeDetail(index) {
     document.querySelector('.modal-content').scrollTop = 0;
 }
 
-// モーダルを閉じる
-function closeModal() {
-    document.getElementById('recipeModal').classList.remove('active');
-}
-
-// 言語切り替え
-function toggleLanguage() {
-    currentLanguage = currentLanguage === 'ja' ? 'ne' : 'ja';
-    document.getElementById('currentLanguage').textContent = currentLanguage === 'ja' ? '日本語' : 'नेपाली';
-    document.getElementById('otherLanguage').textContent = currentLanguage === 'ja' ? 'नेपाली' : '日本語';
-    
-    if (currentLanguage === 'ne') {
-        document.body.classList.add('lang-ne');
-    } else {
-        document.body.classList.remove('lang-ne');
-    }
-    
-    displayMenu(currentMenuIndex);
-    displayRecipeGrid();
-}
-
-// 検索機能
-function handleSearch(e) {
-    searchTerm = e.target.value.toLowerCase().trim();
-    const clearButton = document.getElementById('clearSearch');
-    clearButton.style.display = searchTerm ? 'block' : 'none';
-    
-    const activeTab = document.querySelector('.tab-content.active').id;
-    if (activeTab === 'menus') {
-        displayMenu(currentMenuIndex);
-    } else {
-        displayRecipeGrid();
-    }
-}
-
-function clearSearch() {
-    document.getElementById('searchInput').value = '';
-    searchTerm = '';
-    document.getElementById('clearSearch').style.display = 'none';
-    const activeTab = document.querySelector('.tab-content.active').id;
-    if (activeTab === 'menus') {
-        displayMenu(currentMenuIndex);
-    } else {
-        displayRecipeGrid();
-    }
-}
-
-// ハイライト機能
-function highlightText(text) {
-    if (!searchTerm || !text) return text;
-    const regex = new RegExp(`(${escapeRegExp(searchTerm)})`, 'gi');
-    return text.replace(regex, '<span class="highlight">$1</span>');
-}
-
-function escapeRegExp(string) {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
 // 計算を実行する命令
 function updateCalculations(index) {
     const weightInput = document.getElementById('baseWeight');
@@ -473,15 +415,6 @@ function updateCalculations(index) {
         }
     });
 }
-
-// キーボード操作
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeModal();
-    if (e.ctrlKey && e.key === 'f') {
-        e.preventDefault();
-        document.getElementById('searchInput').focus();
-    }
-});
 
 // ============================================
 // モーダルを閉じる
