@@ -41,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderUpdateBanner();
     displayMenu(0);
     displayRecipeGrid();
+    displayFoodSafety();
 });
 
 // ============================================
@@ -214,6 +215,74 @@ function switchTab(tabName) {
     
     // 検索をクリア
     clearSearch();
+}
+
+function displayFoodSafety() {
+    const container = document.getElementById('foodSafetyContent');
+    const page = menuData.foodSafety;
+
+    if (!container || !page) return;
+
+    const title = currentLanguage === 'ja' ? page.title_ja : page.title_ne || page.title_ja;
+    const intro = currentLanguage === 'ja' ? page.intro_ja : page.intro_ne || page.intro_ja;
+    const closingTitle = currentLanguage === 'ja' ? page.closing_title_ja : page.closing_title_ne || page.closing_title_ja;
+    const closingMessage = currentLanguage === 'ja' ? page.closing_message_ja : page.closing_message_ne || page.closing_message_ja;
+
+    let html = `
+        <section class="food-safety-hero content-area">
+            <span class="food-safety-eyebrow">${currentLanguage === 'ja' ? 'Kitchen Safety' : 'Kitchen Safety'}</span>
+            <h2 class="food-safety-title">${title}</h2>
+            ${intro ? `<p class="food-safety-intro">${intro}</p>` : ''}
+        </section>
+        <div class="food-safety-rules">
+    `;
+
+    page.rules.forEach((rule, index) => {
+        const heading = currentLanguage === 'ja' ? rule.heading_ja : rule.heading_ne || rule.heading_ja;
+        const items = currentLanguage === 'ja' ? (rule.items_ja || []) : (rule.items_ne || []);
+        const reason = currentLanguage === 'ja' ? rule.reason_ja : rule.reason_ne || rule.reason_ja;
+        const warning = currentLanguage === 'ja' ? rule.warning_ja : rule.warning_ne || rule.warning_ja;
+        const action = currentLanguage === 'ja' ? rule.action_ja : rule.action_ne || rule.action_ja;
+        const subheading = currentLanguage === 'ja' ? rule.subheading_ja : rule.subheading_ne || rule.subheading_ja;
+        const substeps = currentLanguage === 'ja' ? (rule.substeps_ja || []) : (rule.substeps_ne || []);
+
+        html += `
+            <article class="food-rule-card">
+                <div class="food-rule-number">${String(index + 1).padStart(2, '0')}</div>
+                <div class="food-rule-body">
+                    <h3 class="food-rule-heading">${heading}</h3>
+                    ${items.length ? `
+                        <ul class="food-rule-list">
+                            ${items.map((item) => `<li>${item}</li>`).join('')}
+                        </ul>
+                    ` : ''}
+                    ${subheading ? `
+                        <section class="food-rule-subsection">
+                            <h4 class="food-rule-subheading">${subheading}</h4>
+                            ${substeps.length ? `
+                                <ul class="food-rule-list compact">
+                                    ${substeps.map((item) => `<li>${item}</li>`).join('')}
+                                </ul>
+                            ` : ''}
+                        </section>
+                    ` : ''}
+                    ${warning ? `<div class="food-rule-warning">${warning}</div>` : ''}
+                    ${action ? `<div class="food-rule-action">${action}</div>` : ''}
+                    ${reason ? `<div class="food-rule-reason">${reason}</div>` : ''}
+                </div>
+            </article>
+        `;
+    });
+
+    html += `
+        </div>
+        <section class="food-safety-closing">
+            <h3 class="food-safety-closing-title">${closingTitle}</h3>
+            <p class="food-safety-closing-message">${closingMessage}</p>
+        </section>
+    `;
+
+    container.innerHTML = html;
 }
 
 // ============================================
@@ -442,6 +511,7 @@ function toggleLanguage() {
             title: "キッチンマニュアル",
             tabMenus: "2026春の献立",
             tabRecipes: "2026春のレシピ",
+            tabFoodSafety: "食品衛生",
             menu0: "春の極上懐石",
             menu1: "連泊献立",
             menu2: "リピーター献立",
@@ -451,6 +521,7 @@ function toggleLanguage() {
             title: "सन् २०२६ वसन्तकालीन मेनु म्यानुअल",
             tabMenus: "मेनु",
             tabRecipes: "रेसिपी",
+            tabFoodSafety: "खाद्य स्वच्छता",
             menu0: "विशेष काइसेकी",
             menu1: "लगातार बसाई",
             menu2: "पुनरावर्ती",
@@ -463,6 +534,7 @@ function toggleLanguage() {
     document.getElementById('mainTitle').textContent = lang.title;
     document.getElementById('tabMenus').textContent = lang.tabMenus;
     document.getElementById('tabRecipes').textContent = lang.tabRecipes;
+    document.getElementById('tabFoodSafety').textContent = lang.tabFoodSafety;
     document.getElementById('tabUpdates').textContent = tabUpdatesLabel;
     document.getElementById('menuBtn0').textContent = lang.menu0;
     document.getElementById('menuBtn1').textContent = lang.menu1;
@@ -470,6 +542,7 @@ function toggleLanguage() {
     document.getElementById('searchInput').placeholder = lang.search;
     renderUpdateNotices();
     renderUpdateBanner();
+    displayFoodSafety();
     
     // bodyクラスの切り替え
     if (currentLanguage === 'ne') {
@@ -499,7 +572,7 @@ function handleSearch(e) {
     const activeTab = document.querySelector('.tab-content.active').id;
     if (activeTab === 'menus') {
         displayMenu(currentMenuIndex);
-    } else {
+    } else if (activeTab === 'recipes') {
         displayRecipeGrid();
     }
 }
@@ -514,7 +587,7 @@ function clearSearch() {
     const activeTab = document.querySelector('.tab-content.active').id;
     if (activeTab === 'menus') {
         displayMenu(currentMenuIndex);
-    } else {
+    } else if (activeTab === 'recipes') {
         displayRecipeGrid();
     }
 }
