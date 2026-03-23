@@ -82,6 +82,20 @@ function setupEventListeners() {
         }
     });
 
+    const closeFoodSafetyLightbox = document.getElementById('closeFoodSafetyLightbox');
+    if (closeFoodSafetyLightbox) {
+        closeFoodSafetyLightbox.addEventListener('click', closeFoodSafetyLightboxModal);
+    }
+
+    const foodSafetyLightbox = document.getElementById('foodSafetyLightbox');
+    if (foodSafetyLightbox) {
+        foodSafetyLightbox.addEventListener('click', (e) => {
+            if (e.target.id === 'foodSafetyLightbox') {
+                closeFoodSafetyLightboxModal();
+            }
+        });
+    }
+
     const updateBanner = document.getElementById('updateBanner');
     if (updateBanner) {
         updateBanner.addEventListener('click', () => {
@@ -245,6 +259,9 @@ function displayFoodSafety() {
         const action = currentLanguage === 'ja' ? rule.action_ja : rule.action_ne || rule.action_ja;
         const subheading = currentLanguage === 'ja' ? rule.subheading_ja : rule.subheading_ne || rule.subheading_ja;
         const substeps = currentLanguage === 'ja' ? (rule.substeps_ja || []) : (rule.substeps_ne || []);
+        const imageSrc = rule.image_src || '';
+        const imageAlt = currentLanguage === 'ja' ? rule.image_alt_ja : rule.image_alt_ne || rule.image_alt_ja;
+        const imageCaption = currentLanguage === 'ja' ? rule.image_caption_ja : rule.image_caption_ne || rule.image_caption_ja;
 
         html += `
             <article class="food-rule-card">
@@ -263,6 +280,20 @@ function displayFoodSafety() {
                                 <ul class="food-rule-list compact">
                                     ${substeps.map((item) => `<li>${item}</li>`).join('')}
                                 </ul>
+                            ` : ''}
+                            ${imageSrc ? `
+                                <button
+                                    class="food-safety-image-button"
+                                    type="button"
+                                    data-image-src="${imageSrc}"
+                                    data-image-alt="${escapeHtmlAttribute(imageAlt || '')}"
+                                    data-image-caption="${escapeHtmlAttribute(imageCaption || '')}"
+                                >
+                                    <figure class="food-safety-image-card">
+                                        <img src="${imageSrc}" alt="${escapeHtmlAttribute(imageAlt || '')}" class="food-safety-inline-image">
+                                        ${imageCaption ? `<figcaption class="food-safety-inline-caption">${imageCaption}</figcaption>` : ''}
+                                    </figure>
+                                </button>
                             ` : ''}
                         </section>
                     ` : ''}
@@ -283,6 +314,57 @@ function displayFoodSafety() {
     `;
 
     container.innerHTML = html;
+    bindFoodSafetyImageButtons();
+}
+
+function bindFoodSafetyImageButtons() {
+    document.querySelectorAll('.food-safety-image-button').forEach((button) => {
+        button.addEventListener('click', () => {
+            openFoodSafetyLightbox({
+                src: button.dataset.imageSrc,
+                alt: button.dataset.imageAlt || '',
+                caption: button.dataset.imageCaption || ''
+            });
+        });
+    });
+}
+
+function openFoodSafetyLightbox({ src, alt, caption }) {
+    const lightbox = document.getElementById('foodSafetyLightbox');
+    const image = document.getElementById('foodSafetyLightboxImage');
+    const captionElement = document.getElementById('foodSafetyLightboxCaption');
+
+    if (!lightbox || !image || !captionElement || !src) return;
+
+    image.src = src;
+    image.alt = alt || '';
+    captionElement.textContent = caption || '';
+    lightbox.classList.add('active');
+    lightbox.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('lightbox-open');
+}
+
+function closeFoodSafetyLightboxModal() {
+    const lightbox = document.getElementById('foodSafetyLightbox');
+    const image = document.getElementById('foodSafetyLightboxImage');
+    const captionElement = document.getElementById('foodSafetyLightboxCaption');
+
+    if (!lightbox || !image || !captionElement) return;
+
+    lightbox.classList.remove('active');
+    lightbox.setAttribute('aria-hidden', 'true');
+    image.removeAttribute('src');
+    image.alt = '';
+    captionElement.textContent = '';
+    document.body.classList.remove('lightbox-open');
+}
+
+function escapeHtmlAttribute(value) {
+    return value
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
 }
 
 // ============================================
@@ -613,6 +695,7 @@ document.addEventListener('keydown', (e) => {
     // Escキーでモーダルを閉じる
     if (e.key === 'Escape') {
         closeModal();
+        closeFoodSafetyLightboxModal();
     }
     
     // Ctrl + F で検索にフォーカス

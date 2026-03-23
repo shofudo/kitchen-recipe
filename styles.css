@@ -484,6 +484,46 @@ body {
     color: var(--text-dark);
 }
 
+.food-safety-image-button {
+    width: 100%;
+    display: block;
+    margin-top: 16px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: zoom-in;
+}
+
+.food-safety-image-card {
+    background: rgba(255, 255, 255, 0.82);
+    border: 1px solid rgba(149, 130, 107, 0.26);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.food-safety-image-button:hover .food-safety-image-card,
+.food-safety-image-button:focus-visible .food-safety-image-card {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+}
+
+.food-safety-inline-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    background: #f1eadf;
+}
+
+.food-safety-inline-caption {
+    padding: 12px 14px 14px;
+    font-size: 0.92rem;
+    color: var(--text-light);
+    text-align: left;
+}
+
 .food-safety-closing {
     background: linear-gradient(135deg, rgba(127, 52, 40, 0.08), rgba(255, 255, 255, 0.82));
     border: 1px solid rgba(127, 52, 40, 0.16);
@@ -502,6 +542,66 @@ body {
     font-size: 1.04rem;
     font-weight: 700;
     color: var(--text-dark);
+}
+
+.food-safety-lightbox {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(18, 21, 25, 0.84);
+    z-index: 2200;
+}
+
+.food-safety-lightbox.active {
+    display: flex;
+}
+
+.food-safety-lightbox-dialog {
+    position: relative;
+    width: min(96vw, 1080px);
+    max-height: 92vh;
+    padding: 20px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(244, 240, 232, 0.98));
+    border: 1px solid rgba(149, 130, 107, 0.3);
+    border-radius: 16px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.34);
+}
+
+.food-safety-lightbox-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 42px;
+    height: 42px;
+    border: none;
+    border-radius: 999px;
+    background: rgba(24, 27, 32, 0.88);
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.food-safety-lightbox-image {
+    display: block;
+    width: 100%;
+    max-height: calc(92vh - 100px);
+    object-fit: contain;
+    border-radius: 10px;
+    background: #f7f2e8;
+}
+
+.food-safety-lightbox-caption {
+    margin-top: 12px;
+    color: var(--text-dark);
+    font-weight: 700;
+    text-align: center;
+}
+
+body.lightbox-open {
+    overflow: hidden;
 }
 
 @media (max-width: 768px) {
@@ -525,6 +625,19 @@ body {
     .food-rule-body,
     .food-safety-closing {
         padding: 20px 18px;
+    }
+
+    .food-safety-lightbox {
+        padding: 12px;
+    }
+
+    .food-safety-lightbox-dialog {
+        width: 100%;
+        padding: 14px;
+    }
+
+    .food-safety-lightbox-image {
+        max-height: calc(92vh - 84px);
     }
 }
 
