@@ -604,8 +604,8 @@ body {
     background-color: rgba(255, 255, 255, 0.72);
     margin-bottom: 10px;
     border-radius: 6px;
-    border-left: 3px solid var(--success-color);
     border: 1px solid rgba(149, 130, 107, 0.16);
+    border-left: 3px solid var(--success-color);
 }
 
 .recipe-list li:last-child {
