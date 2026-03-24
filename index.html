@@ -3,16 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2026年 春の献立マニュアル</title>
+    <title>キッチンマニュアル</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- ヘッダー -->
     <header class="header">
         <div class="container">
-            <h1 class="header-title" id="mainTitle">🌸 2026年 春の献立マニュアル</h1>
+            <h1 class="header-title" id="mainTitle">キッチンマニュアル</h1>
             <div class="header-controls">
-                <!-- 言語切り替えボタン -->
                 <button id="languageToggle" class="btn btn-language">
                     <span id="currentLanguage">日本語</span> / <span id="otherLanguage">नेपाली</span>
                 </button>
@@ -20,10 +18,19 @@
         </div>
     </header>
 
-    <!-- メインコンテンツ -->
+    <section class="update-banner" aria-live="polite">
+        <div class="container">
+            <button id="updateBanner" class="update-banner-button" type="button" hidden>
+                <span class="update-banner-label" id="updateBannerLabel"></span>
+                <span class="update-banner-date" id="updateBannerDate"></span>
+                <span class="update-banner-text" id="updateBannerText"></span>
+                <span class="update-banner-action" id="updateBannerAction"></span>
+            </button>
+        </div>
+    </section>
+
     <main class="main-container">
         <div class="container">
-            <!-- 検索バー -->
             <div class="search-section">
                 <input 
                     type="text" 
@@ -34,56 +41,66 @@
                 <button id="clearSearch" class="btn btn-clear" style="display: none;">✕ クリア</button>
             </div>
 
-            <!-- タブナビゲーション -->
             <div class="tabs">
-    <button class="tab-button active" data-tab="menus" id="tabMenus">📋 献立</button>
-    <button class="tab-button" data-tab="recipes" id="tabRecipes">👨‍🍳 レシピ</button>
-</div>
+                <button class="tab-button active" data-tab="menus" id="tabMenus">2026春の献立</button>
+                <button class="tab-button" data-tab="recipes" id="tabRecipes">2026春のレシピ</button>
+                <button class="tab-button" data-tab="foodSafety" id="tabFoodSafety">食品衛生</button>
+                <button class="tab-button" data-tab="updates" id="tabUpdates">変更のお知らせ</button>
+            </div>
 
-            <!-- 献立セクション -->
             <div id="menus" class="tab-content active">
-    <div class="menu-selector" id="menuSelector">
-    <button class="menu-select-btn active" onclick="switchMenu(0)" id="menuBtn0">春の極上懐石</button>
-    <button class="menu-select-btn" onclick="switchMenu(1)" id="menuBtn1">連泊献立</button>
-    <button class="menu-select-btn" onclick="switchMenu(2)" id="menuBtn2">リピーター献立</button>
-</div>
-    
-    <div id="menuContent" class="content-area">
-        </div>
-</div>
-
-            <!-- レシピセクション -->
-            <div id="recipes" class="tab-content">
-                <div class="recipe-grid" id="recipeGrid">
-                    <!-- レシピカードがJavaScriptで挿入されます -->
+                <div class="menu-selector" id="menuSelector">
+                    <button class="menu-select-btn active" onclick="switchMenu(0)" id="menuBtn0">春の極上懐石</button>
+                    <button class="menu-select-btn" onclick="switchMenu(1)" id="menuBtn1">連泊献立</button>
+                    <button class="menu-select-btn" onclick="switchMenu(2)" id="menuBtn2">リピーター献立</button>
                 </div>
 
-                <!-- レシピ詳細モーダル -->
+                <div id="menuContent" class="content-area"></div>
+            </div>
+
+            <div id="recipes" class="tab-content">
+                <div class="recipe-grid" id="recipeGrid"></div>
+
                 <div id="recipeModal" class="modal">
                     <div class="modal-content">
                         <button class="modal-close" id="closeModal">✕</button>
-                        <div id="recipeDetail">
-                            <!-- レシピ詳細がJavaScriptで挿入されます -->
-                        </div>
+                        <div id="recipeDetail"></div>
                     </div>
                 </div>
+            </div>
+
+            <div id="foodSafety" class="tab-content">
+                <div id="foodSafetyContent" class="food-safety-page"></div>
+            </div>
+
+            <div id="foodSafetyLightbox" class="food-safety-lightbox" aria-hidden="true">
+                <div class="food-safety-lightbox-dialog" role="dialog" aria-modal="true" aria-labelledby="foodSafetyLightboxCaption">
+                    <button class="food-safety-lightbox-close" id="closeFoodSafetyLightbox" type="button" aria-label="画像を閉じる">✕</button>
+                    <img id="foodSafetyLightboxImage" class="food-safety-lightbox-image" alt="">
+                    <p id="foodSafetyLightboxCaption" class="food-safety-lightbox-caption"></p>
+                </div>
+            </div>
+
+            <div id="updates" class="tab-content">
+                <section class="update-notice" aria-labelledby="updateNoticeTitle">
+                    <h2 class="update-notice-title" id="updateNoticeTitle">変更のお知らせ / परिवर्तन सूचना</h2>
+                    <ul class="update-notice-list" id="updateNoticeList"></ul>
+                    <button id="updateNoticeToggle" class="btn update-notice-toggle" type="button" hidden></button>
+                </section>
             </div>
         </div>
     </main>
 
-    <!-- フッター -->
     <footer class="footer">
         <div class="container">
             <p>&copy; 2025 キッチンマニュアル - 令和八年 春</p>
         </div>
     </footer>
 
-    <!-- 上に戻るボタン -->
     <button id="scrollToTop" class="scroll-to-top" title="上に戻る">
         ↑
     </button>
 
-    <!-- データとスクリプト -->
     <script src="menu-data.js"></script>
     <script src="app.js"></script>
 </body>

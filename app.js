@@ -4,6 +4,28 @@
 let currentLanguage = 'ja'; // 'ja' または 'ne'
 let currentMenuIndex = 0;
 let searchTerm = '';
+let showAllUpdates = false;
+
+// 運用ルール:
+// 新しい「変更のお知らせ」は必ず先頭に追加し、date は更新日を 'YYYY-MM-DD' で直接記入してください。
+// これにより、アプリを開いた日ではなく「実際に変更した日」が常に表示されます。
+const updateNotices = [
+    {
+        date: '2026-03-23',
+        ja: '苺×蜜柑のシャーベットのレシピを修正しました。（ver.3）',
+        ne: 'स्ट्रबेरी र मन्दारिन जुसको शरबतको रेसिपी संशोधन गरिएको छ। (Ver.3)'
+    },
+    {
+        date: '2026-03-10',
+        ja: '鯛茶漬けの胡麻醤油のレシピを修正しました。',
+        ne: 'मादाइ चाजुकेको तिल-सोया सस रेसिपी संशोधन गरिएको छ।'
+    },
+    {
+        date: '2026-03-10',
+        ja: '苺と蜜柑のシャーベットのレシピを修正しました。',
+        ne: 'स्ट्रबेरी र सुन्तलाको शरबत रेसिपी संशोधन गरिएको छ।'
+    }
+];
 
 // ============================================
 // 初期化
@@ -15,8 +37,11 @@ document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
     
     // 初期表示
+    renderUpdateNotices();
+    renderUpdateBanner();
     displayMenu(0);
     displayRecipeGrid();
+    displayFoodSafety();
 });
 
 // ============================================
@@ -38,6 +63,14 @@ function setupEventListeners() {
     searchInput.addEventListener('input', handleSearch);
     
     document.getElementById('clearSearch').addEventListener('click', clearSearch);
+
+    const updateNoticeToggle = document.getElementById('updateNoticeToggle');
+    if (updateNoticeToggle) {
+        updateNoticeToggle.addEventListener('click', () => {
+            showAllUpdates = !showAllUpdates;
+            renderUpdateNotices();
+        });
+    }
     
     // モーダルを閉じる
     document.getElementById('closeModal').addEventListener('click', closeModal);
@@ -48,6 +81,28 @@ function setupEventListeners() {
             closeModal();
         }
     });
+
+    const closeFoodSafetyLightbox = document.getElementById('closeFoodSafetyLightbox');
+    if (closeFoodSafetyLightbox) {
+        closeFoodSafetyLightbox.addEventListener('click', closeFoodSafetyLightboxModal);
+    }
+
+    const foodSafetyLightbox = document.getElementById('foodSafetyLightbox');
+    if (foodSafetyLightbox) {
+        foodSafetyLightbox.addEventListener('click', (e) => {
+            if (e.target.id === 'foodSafetyLightbox') {
+                closeFoodSafetyLightboxModal();
+            }
+        });
+    }
+
+    const updateBanner = document.getElementById('updateBanner');
+    if (updateBanner) {
+        updateBanner.addEventListener('click', () => {
+            switchTab('updates');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
     
     // 上に戻るボタン
     const scrollToTopBtn = document.getElementById('scrollToTop');
@@ -68,6 +123,94 @@ function setupEventListeners() {
     });
 }
 
+
+function formatNoticeDate(dateValue) {
+    if (!dateValue) return '';
+
+    let date;
+
+    // YYYY-MM-DD はローカル日付として扱い、タイムゾーン差で日付がズレるのを防ぐ
+    if (typeof dateValue === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
+        const [year, month, day] = dateValue.split('-').map(Number);
+        date = new Date(year, month - 1, day);
+    } else {
+        date = new Date(dateValue);
+    }
+
+    if (Number.isNaN(date.getTime())) {
+        return dateValue;
+    }
+
+    return date.toLocaleDateString(currentLanguage === 'ja' ? 'ja-JP' : 'ne-NP', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+    });
+}
+
+
+function renderUpdateNotices() {
+    const updateNoticeTitle = document.getElementById('updateNoticeTitle');
+    const updateNoticeList = document.getElementById('updateNoticeList');
+    const updateNoticeToggle = document.getElementById('updateNoticeToggle');
+
+    if (!updateNoticeTitle || !updateNoticeList) return;
+
+    updateNoticeTitle.textContent = currentLanguage === 'ja'
+        ? '変更のお知らせ / परिवर्तन सूचना'
+        : 'परिवर्तन सूचना / 変更のお知らせ';
+
+    const visibleCount = showAllUpdates ? updateNotices.length : 3;
+    const notices = updateNotices.slice(0, visibleCount);
+
+    updateNoticeList.innerHTML = notices.map((notice, idx) => {
+        const dateLabel = formatNoticeDate(notice.date);
+
+        return `
+            <li>
+                ${dateLabel ? `<div class="update-date">${dateLabel}</div>` : ''}
+                <div class="update-ja">${idx + 1}. ${notice.ja}</div>
+                <div class="update-ne">${notice.ne}</div>
+            </li>
+        `;
+    }).join('');
+
+    if (!updateNoticeToggle) return;
+
+    if (updateNotices.length <= 3) {
+        updateNoticeToggle.hidden = true;
+        return;
+    }
+
+    updateNoticeToggle.hidden = false;
+    updateNoticeToggle.textContent = showAllUpdates
+        ? (currentLanguage === 'ja' ? '閉じる' : 'Close')
+        : (currentLanguage === 'ja' ? 'もっと見る' : 'View more');
+}
+
+function renderUpdateBanner() {
+    const updateBanner = document.getElementById('updateBanner');
+    const updateBannerLabel = document.getElementById('updateBannerLabel');
+    const updateBannerDate = document.getElementById('updateBannerDate');
+    const updateBannerText = document.getElementById('updateBannerText');
+    const updateBannerAction = document.getElementById('updateBannerAction');
+
+    if (!updateBanner || !updateBannerLabel || !updateBannerDate || !updateBannerText || !updateBannerAction) return;
+
+    const latestNotice = updateNotices[0];
+
+    if (!latestNotice) {
+        updateBanner.hidden = true;
+        return;
+    }
+
+    updateBanner.hidden = false;
+    updateBannerLabel.textContent = currentLanguage === 'ja' ? '更新' : 'UPDATE';
+    updateBannerDate.textContent = formatNoticeDate(latestNotice.date);
+    updateBannerText.textContent = currentLanguage === 'ja' ? latestNotice.ja : latestNotice.ne;
+    updateBannerAction.textContent = currentLanguage === 'ja' ? '一覧を見る' : 'View all';
+}
+
 // ============================================
 // タブ切り替え
 // ============================================
@@ -86,6 +229,142 @@ function switchTab(tabName) {
     
     // 検索をクリア
     clearSearch();
+}
+
+function displayFoodSafety() {
+    const container = document.getElementById('foodSafetyContent');
+    const page = menuData.foodSafety;
+
+    if (!container || !page) return;
+
+    const title = currentLanguage === 'ja' ? page.title_ja : page.title_ne || page.title_ja;
+    const intro = currentLanguage === 'ja' ? page.intro_ja : page.intro_ne || page.intro_ja;
+    const closingTitle = currentLanguage === 'ja' ? page.closing_title_ja : page.closing_title_ne || page.closing_title_ja;
+    const closingMessage = currentLanguage === 'ja' ? page.closing_message_ja : page.closing_message_ne || page.closing_message_ja;
+
+    let html = `
+        <section class="food-safety-hero content-area">
+            <span class="food-safety-eyebrow">${currentLanguage === 'ja' ? 'Kitchen Safety' : 'Kitchen Safety'}</span>
+            <h2 class="food-safety-title">${title}</h2>
+            ${intro ? `<p class="food-safety-intro">${intro}</p>` : ''}
+        </section>
+        <div class="food-safety-rules">
+    `;
+
+    page.rules.forEach((rule, index) => {
+        const heading = currentLanguage === 'ja' ? rule.heading_ja : rule.heading_ne || rule.heading_ja;
+        const items = currentLanguage === 'ja' ? (rule.items_ja || []) : (rule.items_ne || []);
+        const reason = currentLanguage === 'ja' ? rule.reason_ja : rule.reason_ne || rule.reason_ja;
+        const warning = currentLanguage === 'ja' ? rule.warning_ja : rule.warning_ne || rule.warning_ja;
+        const action = currentLanguage === 'ja' ? rule.action_ja : rule.action_ne || rule.action_ja;
+        const subheading = currentLanguage === 'ja' ? rule.subheading_ja : rule.subheading_ne || rule.subheading_ja;
+        const substeps = currentLanguage === 'ja' ? (rule.substeps_ja || []) : (rule.substeps_ne || []);
+        const imageSrc = rule.image_src || '';
+        const imageAlt = currentLanguage === 'ja' ? rule.image_alt_ja : rule.image_alt_ne || rule.image_alt_ja;
+        const imageCaption = currentLanguage === 'ja' ? rule.image_caption_ja : rule.image_caption_ne || rule.image_caption_ja;
+
+        html += `
+            <article class="food-rule-card">
+                <div class="food-rule-number">${String(index + 1).padStart(2, '0')}</div>
+                <div class="food-rule-body">
+                    <h3 class="food-rule-heading">${heading}</h3>
+                    ${items.length ? `
+                        <ul class="food-rule-list">
+                            ${items.map((item) => `<li>${item}</li>`).join('')}
+                        </ul>
+                    ` : ''}
+                    ${subheading ? `
+                        <section class="food-rule-subsection">
+                            <h4 class="food-rule-subheading">${subheading}</h4>
+                            ${substeps.length ? `
+                                <ul class="food-rule-list compact">
+                                    ${substeps.map((item) => `<li>${item}</li>`).join('')}
+                                </ul>
+                            ` : ''}
+                        </section>
+                    ` : ''}
+                    ${imageSrc ? `
+                        <button
+                            class="food-safety-image-button"
+                            type="button"
+                            data-image-src="${imageSrc}"
+                            data-image-alt="${escapeHtmlAttribute(imageAlt || '')}"
+                            data-image-caption="${escapeHtmlAttribute(imageCaption || '')}"
+                        >
+                            <figure class="food-safety-image-card">
+                                <img src="${imageSrc}" alt="${escapeHtmlAttribute(imageAlt || '')}" class="food-safety-inline-image">
+                                ${imageCaption ? `<figcaption class="food-safety-inline-caption">${imageCaption}</figcaption>` : ''}
+                            </figure>
+                        </button>
+                    ` : ''}
+                    ${warning ? `<div class="food-rule-warning">${warning}</div>` : ''}
+                    ${action ? `<div class="food-rule-action">${action}</div>` : ''}
+                    ${reason ? `<div class="food-rule-reason">${reason}</div>` : ''}
+                </div>
+            </article>
+        `;
+    });
+
+    html += `
+        </div>
+        <section class="food-safety-closing">
+            <h3 class="food-safety-closing-title">${closingTitle}</h3>
+            <p class="food-safety-closing-message">${closingMessage}</p>
+        </section>
+    `;
+
+    container.innerHTML = html;
+    bindFoodSafetyImageButtons();
+}
+
+function bindFoodSafetyImageButtons() {
+    document.querySelectorAll('.food-safety-image-button').forEach((button) => {
+        button.addEventListener('click', () => {
+            openFoodSafetyLightbox({
+                src: button.dataset.imageSrc,
+                alt: button.dataset.imageAlt || '',
+                caption: button.dataset.imageCaption || ''
+            });
+        });
+    });
+}
+
+function openFoodSafetyLightbox({ src, alt, caption }) {
+    const lightbox = document.getElementById('foodSafetyLightbox');
+    const image = document.getElementById('foodSafetyLightboxImage');
+    const captionElement = document.getElementById('foodSafetyLightboxCaption');
+
+    if (!lightbox || !image || !captionElement || !src) return;
+
+    image.src = src;
+    image.alt = alt || '';
+    captionElement.textContent = caption || '';
+    lightbox.classList.add('active');
+    lightbox.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('lightbox-open');
+}
+
+function closeFoodSafetyLightboxModal() {
+    const lightbox = document.getElementById('foodSafetyLightbox');
+    const image = document.getElementById('foodSafetyLightboxImage');
+    const captionElement = document.getElementById('foodSafetyLightboxCaption');
+
+    if (!lightbox || !image || !captionElement) return;
+
+    lightbox.classList.remove('active');
+    lightbox.setAttribute('aria-hidden', 'true');
+    image.removeAttribute('src');
+    image.alt = '';
+    captionElement.textContent = '';
+    document.body.classList.remove('lightbox-open');
+}
+
+function escapeHtmlAttribute(value) {
+    return value
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
 }
 
 // ============================================
@@ -119,7 +398,6 @@ function displayMenu(index) {
         html += `
             <div class="menu-category">
                 <div class="category-header">
-                    <span>🍽️</span>
                     <span>${categoryName}</span>
                 </div>
                 <div class="category-items">
@@ -168,13 +446,7 @@ function displayRecipeGrid() {
             
             html += `
                 <div class="recipe-card" onclick="showRecipeDetail(${index})">
-                    <div class="recipe-card-title">
-                        👨‍🍳 ${highlightText(title)}
-                    </div>
-                    <div class="recipe-card-info">
-                        <span>📝 材料: ${recipe.ingredients.length}項目</span>
-                        <span>📋 手順: ${recipe.instructions.length}ステップ</span>
-                    </div>
+                    <div class="recipe-card-title">${highlightText(title)}</div>
                 </div>
             `;
         }
@@ -203,7 +475,7 @@ function showRecipeDetail(index) {
         const label = currentLanguage === 'ja' ? recipe.calc_base_label_ja : recipe.calc_base_label_ne;
         html += `
             <div class="calc-section" style="background: #f0f7ff; padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 2px solid #3498db;">
-                <label style="font-weight: bold; display: block; margin-bottom: 5px;">⚖️ ${label}</label>
+                <label style="font-weight: bold; display: block; margin-bottom: 5px;">${label}</label>
                 <input type="number" id="baseWeight" placeholder="例: 1000" style="width: 100%; padding: 10px; font-size: 1.2rem; border-radius: 5px; border: 1px solid #ccc;" oninput="updateCalculations(${index})">
             </div>
         `;
@@ -213,7 +485,7 @@ function showRecipeDetail(index) {
     if (recipe.ingredients && recipe.ingredients.length > 0) {
         html += `
             <div class="recipe-section">
-                <h3 class="recipe-section-title">📝 ${currentLanguage === 'ja' ? '材料' : 'सामग्री'}</h3>
+                <h3 class="recipe-section-title">${currentLanguage === 'ja' ? '材料' : 'सामग्री'}</h3>
                 <ul class="recipe-list">
         `;
         
@@ -238,7 +510,7 @@ function showRecipeDetail(index) {
     if (recipe.instructions && recipe.instructions.length > 0) {
         html += `
             <div class="recipe-section">
-                <h3 class="recipe-section-title">👨‍🍳 ${currentLanguage === 'ja' ? '作り方' : 'विधि'}</h3>
+                <h3 class="recipe-section-title">${currentLanguage === 'ja' ? '作り方' : 'विधि'}</h3>
                 <ul class="recipe-list">
         `;
         recipe.instructions.forEach(item => {
@@ -256,7 +528,7 @@ function showRecipeDetail(index) {
     if (recipe.notes && recipe.notes.length > 0) {
         html += `
             <div class="recipe-section" style="background: #fff5f5; padding: 10px; border-radius: 10px;">
-                <h3 class="recipe-section-title" style="color: #c0392b; border-bottom-color: #c0392b;">⚠️ ${currentLanguage === 'ja' ? '補足' : 'नोट'}</h3>
+                <h3 class="recipe-section-title" style="color: #7f3428; border-bottom-color: #bda38c;">${currentLanguage === 'ja' ? '補足' : 'नोट'}</h3>
                 <ul class="recipe-list">
         `;
         recipe.notes.forEach(item => {
@@ -272,65 +544,7 @@ function showRecipeDetail(index) {
     
     detailDiv.innerHTML = html;
     modal.classList.add('active');
-    modal.scrollTop = 0;
-}
-
-// モーダルを閉じる
-function closeModal() {
-    document.getElementById('recipeModal').classList.remove('active');
-}
-
-// 言語切り替え
-function toggleLanguage() {
-    currentLanguage = currentLanguage === 'ja' ? 'ne' : 'ja';
-    document.getElementById('currentLanguage').textContent = currentLanguage === 'ja' ? '日本語' : 'नेपाली';
-    document.getElementById('otherLanguage').textContent = currentLanguage === 'ja' ? 'नेपाली' : '日本語';
-    
-    if (currentLanguage === 'ne') {
-        document.body.classList.add('lang-ne');
-    } else {
-        document.body.classList.remove('lang-ne');
-    }
-    
-    displayMenu(currentMenuIndex);
-    displayRecipeGrid();
-}
-
-// 検索機能
-function handleSearch(e) {
-    searchTerm = e.target.value.toLowerCase().trim();
-    const clearButton = document.getElementById('clearSearch');
-    clearButton.style.display = searchTerm ? 'block' : 'none';
-    
-    const activeTab = document.querySelector('.tab-content.active').id;
-    if (activeTab === 'menus') {
-        displayMenu(currentMenuIndex);
-    } else {
-        displayRecipeGrid();
-    }
-}
-
-function clearSearch() {
-    document.getElementById('searchInput').value = '';
-    searchTerm = '';
-    document.getElementById('clearSearch').style.display = 'none';
-    const activeTab = document.querySelector('.tab-content.active').id;
-    if (activeTab === 'menus') {
-        displayMenu(currentMenuIndex);
-    } else {
-        displayRecipeGrid();
-    }
-}
-
-// ハイライト機能
-function highlightText(text) {
-    if (!searchTerm || !text) return text;
-    const regex = new RegExp(`(${escapeRegExp(searchTerm)})`, 'gi');
-    return text.replace(regex, '<span class="highlight">$1</span>');
-}
-
-function escapeRegExp(string) {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    document.querySelector('.modal-content').scrollTop = 0;
 }
 
 // 計算を実行する命令
@@ -354,15 +568,6 @@ function updateCalculations(index) {
     });
 }
 
-// キーボード操作
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeModal();
-    if (e.ctrlKey && e.key === 'f') {
-        e.preventDefault();
-        document.getElementById('searchInput').focus();
-    }
-});
-
 // ============================================
 // モーダルを閉じる
 // ============================================
@@ -385,18 +590,20 @@ function toggleLanguage() {
     // UIパーツの翻訳
     const ui = {
         ja: {
-            title: "🌸 2026年 春の献立マニュアル",
-            tabMenus: "📋 献立",
-            tabRecipes: "👨‍🍳 レシピ",
+            title: "キッチンマニュアル",
+            tabMenus: "2026春の献立",
+            tabRecipes: "2026春のレシピ",
+            tabFoodSafety: "食品衛生",
             menu0: "春の極上懐石",
             menu1: "連泊献立",
             menu2: "リピーター献立",
             search: "料理名やカテゴリーで検索..."
         },
         ne: {
-            title: "🌸 सन् २०२६ वसन्तकालीन मेनु म्यानुअल",
-            tabMenus: "📋 मेनु",
-            tabRecipes: "👨‍🍳 रेसिपी",
+            title: "सन् २०२६ वसन्तकालीन मेनु म्यानुअल",
+            tabMenus: "मेनु",
+            tabRecipes: "रेसिपी",
+            tabFoodSafety: "खाद्य स्वच्छता",
             menu0: "विशेष काइसेकी",
             menu1: "लगातार बसाई",
             menu2: "पुनरावर्ती",
@@ -405,13 +612,19 @@ function toggleLanguage() {
     };
 
     const lang = ui[currentLanguage];
+    const tabUpdatesLabel = currentLanguage === 'ja' ? '変更のお知らせ' : 'परिवर्तन सूचना';
     document.getElementById('mainTitle').textContent = lang.title;
     document.getElementById('tabMenus').textContent = lang.tabMenus;
     document.getElementById('tabRecipes').textContent = lang.tabRecipes;
+    document.getElementById('tabFoodSafety').textContent = lang.tabFoodSafety;
+    document.getElementById('tabUpdates').textContent = tabUpdatesLabel;
     document.getElementById('menuBtn0').textContent = lang.menu0;
     document.getElementById('menuBtn1').textContent = lang.menu1;
     document.getElementById('menuBtn2').textContent = lang.menu2;
     document.getElementById('searchInput').placeholder = lang.search;
+    renderUpdateNotices();
+    renderUpdateBanner();
+    displayFoodSafety();
     
     // bodyクラスの切り替え
     if (currentLanguage === 'ne') {
@@ -441,7 +654,7 @@ function handleSearch(e) {
     const activeTab = document.querySelector('.tab-content.active').id;
     if (activeTab === 'menus') {
         displayMenu(currentMenuIndex);
-    } else {
+    } else if (activeTab === 'recipes') {
         displayRecipeGrid();
     }
 }
@@ -456,7 +669,7 @@ function clearSearch() {
     const activeTab = document.querySelector('.tab-content.active').id;
     if (activeTab === 'menus') {
         displayMenu(currentMenuIndex);
-    } else {
+    } else if (activeTab === 'recipes') {
         displayRecipeGrid();
     }
 }
@@ -482,6 +695,7 @@ document.addEventListener('keydown', (e) => {
     // Escキーでモーダルを閉じる
     if (e.key === 'Escape') {
         closeModal();
+        closeFoodSafetyLightboxModal();
     }
     
     // Ctrl + F で検索にフォーカス
