@@ -281,21 +281,21 @@ function displayFoodSafety() {
                                     ${substeps.map((item) => `<li>${item}</li>`).join('')}
                                 </ul>
                             ` : ''}
-                            ${imageSrc ? `
-                                <button
-                                    class="food-safety-image-button"
-                                    type="button"
-                                    data-image-src="${imageSrc}"
-                                    data-image-alt="${escapeHtmlAttribute(imageAlt || '')}"
-                                    data-image-caption="${escapeHtmlAttribute(imageCaption || '')}"
-                                >
-                                    <figure class="food-safety-image-card">
-                                        <img src="${imageSrc}" alt="${escapeHtmlAttribute(imageAlt || '')}" class="food-safety-inline-image">
-                                        ${imageCaption ? `<figcaption class="food-safety-inline-caption">${imageCaption}</figcaption>` : ''}
-                                    </figure>
-                                </button>
-                            ` : ''}
                         </section>
+                    ` : ''}
+                    ${imageSrc ? `
+                        <button
+                            class="food-safety-image-button"
+                            type="button"
+                            data-image-src="${imageSrc}"
+                            data-image-alt="${escapeHtmlAttribute(imageAlt || '')}"
+                            data-image-caption="${escapeHtmlAttribute(imageCaption || '')}"
+                        >
+                            <figure class="food-safety-image-card">
+                                <img src="${imageSrc}" alt="${escapeHtmlAttribute(imageAlt || '')}" class="food-safety-inline-image">
+                                ${imageCaption ? `<figcaption class="food-safety-inline-caption">${imageCaption}</figcaption>` : ''}
+                            </figure>
+                        </button>
                     ` : ''}
                     ${warning ? `<div class="food-rule-warning">${warning}</div>` : ''}
                     ${action ? `<div class="food-rule-action">${action}</div>` : ''}
