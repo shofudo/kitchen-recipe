@@ -1,0 +1,4 @@
+Expected image file:
+assets/food-safety-handwash.png
+
+This file is referenced by the food safety handwashing section and lightbox.
