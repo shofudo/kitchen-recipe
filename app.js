@@ -591,10 +591,10 @@ function toggleLanguage() {
     const ui = {
         ja: {
             title: "キッチンマニュアル",
-            tabMenus: "2026春の献立",
-            tabRecipes: "2026春のレシピ",
+            tabMenus: "2026夏の献立",
+            tabRecipes: "2026夏のレシピ",
             tabFoodSafety: "食品衛生",
-            menu0: "春の極上懐石",
+            menu0: "夏の極上懐石",
             menu1: "連泊献立",
             menu2: "リピーター献立",
             search: "料理名やカテゴリーで検索..."
