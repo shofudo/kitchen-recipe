@@ -753,6 +753,51 @@ body.lightbox-open {
 }
 
 /* ============================================
+   カテゴリーアコーディオン
+============================================ */
+.category-header.collapsible {
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    justify-content: space-between;
+}
+
+.category-header.collapsible:hover {
+    color: var(--accent-color);
+}
+
+.category-toggle-icon {
+    font-size: 0.85rem;
+    color: var(--accent-color);
+    flex-shrink: 0;
+}
+
+.category-items.collapsed {
+    display: none;
+}
+
+/* お造り・付け合せ・調味料などのサブグループ */
+.menu-sub-group {
+    margin-top: 6px;
+}
+
+.sub-group-label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--accent-color);
+    padding: 8px 4px 5px;
+    border-bottom: 1px dashed var(--border-color);
+    margin-bottom: 6px;
+    letter-spacing: 0.04em;
+}
+
+.menu-item.sub-item {
+    margin-left: 8px;
+    padding: 12px 15px;
+    border-left: 2px solid rgba(138, 104, 68, 0.3);
+}
+
+/* ============================================
    レシピグリッド
 ============================================ */
 .recipe-grid {

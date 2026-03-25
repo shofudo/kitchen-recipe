@@ -373,59 +373,101 @@ function escapeHtmlAttribute(value) {
 function displayMenu(index) {
     const menu = menuData.menus[index];
     const menuContent = document.getElementById('menuContent');
-    
-    // タイトルを作成
+
     let html = `<h2 class="menu-title">${currentLanguage === 'ja' ? menu.title_ja : menu.title_ne || menu.title_ja}</h2>`;
-    
-    // カテゴリーごとにグループ化
+
+    // カテゴリーごとにグループ化（順序を保持）
     const categories = {};
+    const categoryOrder = [];
     menu.items.forEach(item => {
-        const categoryKey = item.category_ja;
-        if (!categories[categoryKey]) {
-            categories[categoryKey] = {
-                name_ja: item.category_ja,
-                name_ne: item.category_ne,
-                items: []
-            };
+        const key = item.category_ja;
+        if (!categories[key]) {
+            categories[key] = { name_ja: item.category_ja, name_ne: item.category_ne, items: [] };
+            categoryOrder.push(key);
         }
-        categories[categoryKey].items.push(item);
+        categories[key].items.push(item);
     });
-    
-    // カテゴリーごとに表示
-    Object.values(categories).forEach(category => {
-        const categoryName = currentLanguage === 'ja' ? category.name_ja : category.name_ne || category.name_ja;
-        
-        html += `
-            <div class="menu-category">
-                <div class="category-header">
-                    <span>${categoryName}</span>
-                </div>
-                <div class="category-items">
-        `;
-        
-        category.items.forEach(item => {
-            const isVisible = searchTerm === '' || 
-                              item.name_ja.toLowerCase().includes(searchTerm) || 
-                              item.name_ne.toLowerCase().includes(searchTerm) ||
-                              item.category_ja.toLowerCase().includes(searchTerm);
-            
-            if (isVisible) {
-                html += `
-                    <div class="menu-item">
-                        <div class="item-name-ja">${highlightText(item.name_ja)}</div>
-                        ${item.name_ne ? `<div class="item-name-ne">${highlightText(item.name_ne)}</div>` : ''}
-                    </div>
-                `;
+
+    // 「親キー・サブ名」パターンで親子関係を検出
+    function findParentKey(key) {
+        return categoryOrder.find(k => k !== key && key.startsWith(k + '・')) || null;
+    }
+
+    const processedKeys = new Set();
+
+    categoryOrder.forEach(key => {
+        if (processedKeys.has(key)) return;
+        processedKeys.add(key);
+
+        if (findParentKey(key)) return; // 子カテゴリーは親の中で処理
+
+        // 子カテゴリーを収集（例：お造り・付け合せ、お造り・調味料）
+        const childKeys = categoryOrder.filter(k => k !== key && k.startsWith(key + '・'));
+        childKeys.forEach(k => processedKeys.add(k));
+
+        const categoryName = currentLanguage === 'ja' ? categories[key].name_ja : categories[key].name_ne || categories[key].name_ja;
+
+        html += `<div class="menu-category">
+            <div class="category-header collapsible" onclick="toggleCategory(this)">
+                <span>${categoryName}</span>
+                <span class="category-toggle-icon">▾</span>
+            </div>
+            <div class="category-items">`;
+
+        categories[key].items.forEach(item => {
+            if (isMenuItemVisible(item)) {
+                html += renderMenuItemHtml(item);
             }
         });
-        
-        html += `
-                </div>
-            </div>
-        `;
+
+        // 子カテゴリーをサブグループとして表示
+        childKeys.forEach(childKey => {
+            const child = categories[childKey];
+            const subLabel = currentLanguage === 'ja'
+                ? childKey.slice(key.length + 1)
+                : child.name_ne || childKey.slice(key.length + 1);
+
+            const visibleSubItems = child.items.filter(item => isMenuItemVisible(item));
+            if (visibleSubItems.length === 0 && searchTerm) return;
+
+            html += `<div class="menu-sub-group">
+                <div class="sub-group-label">${subLabel}</div>`;
+
+            child.items.forEach(item => {
+                if (isMenuItemVisible(item)) {
+                    html += renderMenuItemHtml(item, true);
+                }
+            });
+
+            html += `</div>`;
+        });
+
+        html += `</div></div>`;
     });
-    
+
     menuContent.innerHTML = html;
+}
+
+function isMenuItemVisible(item) {
+    if (searchTerm === '') return true;
+    return item.name_ja.toLowerCase().includes(searchTerm) ||
+           (item.name_ne && item.name_ne.toLowerCase().includes(searchTerm)) ||
+           item.category_ja.toLowerCase().includes(searchTerm);
+}
+
+function renderMenuItemHtml(item, isSub = false) {
+    return `<div class="menu-item${isSub ? ' sub-item' : ''}">
+        <div class="item-name-ja">${highlightText(item.name_ja)}</div>
+        ${item.name_ne ? `<div class="item-name-ne">${highlightText(item.name_ne)}</div>` : ''}
+    </div>`;
+}
+
+function toggleCategory(header) {
+    const items = header.nextElementSibling;
+    const icon = header.querySelector('.category-toggle-icon');
+    const isOpen = !items.classList.contains('collapsed');
+    items.classList.toggle('collapsed', isOpen);
+    icon.textContent = isOpen ? '▸' : '▾';
 }
 
 // ============================================
