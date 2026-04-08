@@ -1,8 +1,13 @@
 // menu-data.js
 const menuData = {
-  "menus": [
+  "seasons": {
+    "spring": {
+      "label_ja": "春",
+      "label_ne": "वसन्त",
+      "menus": [
     {
   "name": "春の極上懐石",
+  "name_ne": "विशेष काइसेकी",
   "title_ja": "令和八年　春の極上懐石",
   "title_ne": "वि.सं. २०८३ वसन्तकालीन विशेष काइसेकी मेनु",
   "items": [
@@ -31,6 +36,7 @@ const menuData = {
 },
 {
   "name": "連泊献立",
+  "name_ne": "लगातार बसाई",
   "title_ja": "令和八年　連泊　お献立",
   "title_ne": "वि.सं. २०८३ 連泊 (Consecutive stay) विशेष मेनु",
   "items": [
@@ -48,6 +54,7 @@ const menuData = {
 },
     {
   "name": "リピーター献立",
+  "name_ne": "पुनरावर्ती",
   "title_ja": "令和八年　リピーター春の極上懐石　献立",
   "title_ne": "सन् २०२६ पुनःआगमन (रिपिटर) पाहुनाका लागि वसन्त विशेष काइसेकी मेनु",
   "items": [
@@ -81,9 +88,8 @@ const menuData = {
     { "category_ja": "小菓子", "category_ne": "सानो मिठाई", "name_ja": "丁字のボーロ　生姜の金平糖", "name_ne": "लौंग (चोजी) स्वादको बोろ बिस्कुट, अदुवा स्वादको कोन्ペイトー चिनी" }
   ]
     }
-  ],
-// menu-data.js の一番下をこのように書きかえます
-"recipes": [
+      ],
+      "recipes": [
     {
       "name": "ヤシオマス下処理",
       "title_ja": "ヤシオマス刺身用　下処理レシピ",
@@ -235,7 +241,27 @@ const menuData = {
         { "text_ja": "時間：できれば一晩冷やすと味がなじんで美味しくなります。", "text_ne": "समय: सम्भव भए रातभरि फ्रिजमा राख्दा स्वाद अझ राम्रो हुन्छ।" }
       ]
     }
-  ],
+      ]
+    },
+    "summer": {
+      "label_ja": "夏",
+      "label_ne": "ग्रीष्म",
+      "menus": [],
+      "recipes": []
+    },
+    "autumn": {
+      "label_ja": "秋",
+      "label_ne": "शरद",
+      "menus": [],
+      "recipes": []
+    },
+    "winter": {
+      "label_ja": "冬",
+      "label_ne": "हिउँद",
+      "menus": [],
+      "recipes": []
+    }
+  },
   "foodSafety": {
     "title_ja": "食品衛生「絶対守る5ルール」",
     "title_ne": "खाद्य स्वच्छता – अनिवार्य ५ नियम",

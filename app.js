@@ -2,6 +2,7 @@
 // グローバル変数
 // ============================================
 let currentLanguage = 'ja'; // 'ja' または 'ne'
+let currentSeason = 'spring'; // 'spring' | 'summer' | 'autumn' | 'winter'
 let currentMenuIndex = 0;
 let searchTerm = '';
 let showAllUpdates = false;
@@ -39,6 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // 初期表示
     renderUpdateNotices();
     renderUpdateBanner();
+    renderSeasonButtons();
+    renderMenuButtons();
     displayMenu(0);
     displayRecipeGrid();
     displayFoodSafety();
@@ -63,6 +66,11 @@ function setupEventListeners() {
     searchInput.addEventListener('input', handleSearch);
     
     document.getElementById('clearSearch').addEventListener('click', clearSearch);
+
+    // シーズン切り替えボタン
+    document.querySelectorAll('.season-btn').forEach(btn => {
+        btn.addEventListener('click', () => switchSeason(btn.dataset.season));
+    });
 
     const updateNoticeToggle = document.getElementById('updateNoticeToggle');
     if (updateNoticeToggle) {
@@ -371,8 +379,13 @@ function escapeHtmlAttribute(value) {
 // 献立の表示
 // ============================================
 function displayMenu(index) {
-    const menu = menuData.menus[index];
+    const seasonData = menuData.seasons[currentSeason];
     const menuContent = document.getElementById('menuContent');
+    if (!seasonData.menus || seasonData.menus.length === 0) {
+        menuContent.innerHTML = `<div class="content-area" style="text-align:center;padding:40px;color:var(--text-light);">${currentLanguage === 'ja' ? '準備中です' : 'तयारी भइरहेको छ'}</div>`;
+        return;
+    }
+    const menu = seasonData.menus[index];
 
     let html = `<h2 class="menu-title">${currentLanguage === 'ja' ? menu.title_ja : menu.title_ne || menu.title_ja}</h2>`;
 
@@ -475,9 +488,15 @@ function toggleCategory(header) {
 // ============================================
 function displayRecipeGrid() {
     const recipeGrid = document.getElementById('recipeGrid');
+    const recipes = menuData.seasons[currentSeason].recipes || [];
     let html = '';
-    
-    menuData.recipes.forEach((recipe, index) => {
+
+    if (recipes.length === 0) {
+        recipeGrid.innerHTML = `<p style="text-align:center;color:#999;">${currentLanguage === 'ja' ? '準備中です' : 'तयारी भइरहेको छ'}</p>`;
+        return;
+    }
+
+    recipes.forEach((recipe, index) => {
         const isVisible = searchTerm === '' || 
                           recipe.title_ja.toLowerCase().includes(searchTerm) ||
                           recipe.title_ne.toLowerCase().includes(searchTerm) ||
@@ -504,7 +523,7 @@ function displayRecipeGrid() {
 
 // レシピ詳細の表示（ここからファイルの最後までを貼り替え）
 function showRecipeDetail(index) {
-    const recipe = menuData.recipes[index];
+    const recipe = menuData.seasons[currentSeason].recipes[index];
     const modal = document.getElementById('recipeModal');
     const detailDiv = document.getElementById('recipeDetail');
     
@@ -595,8 +614,8 @@ function updateCalculations(index) {
     if (!weightInput) return;
 
     const weight = weightInput.value;
-    const recipe = menuData.recipes[index];
-    
+    const recipe = menuData.seasons[currentSeason].recipes[index];
+
     recipe.ingredients.forEach((item, i) => {
         const resultElement = document.getElementById(`res-${i}`);
         if (resultElement) {
@@ -633,22 +652,16 @@ function toggleLanguage() {
     const ui = {
         ja: {
             title: "キッチンマニュアル",
-            tabMenus: "2026春の献立",
-            tabRecipes: "2026春のレシピ",
+            tabMenus: "献立",
+            tabRecipes: "レシピ",
             tabFoodSafety: "食品衛生",
-            menu0: "春の極上懐石",
-            menu1: "連泊献立",
-            menu2: "リピーター献立",
             search: "料理名やカテゴリーで検索..."
         },
         ne: {
-            title: "सन् २०२६ वसन्तकालीन मेनु म्यानुअल",
+            title: "किचन म्यानुअल",
             tabMenus: "मेनु",
             tabRecipes: "रेसिपी",
             tabFoodSafety: "खाद्य स्वच्छता",
-            menu0: "विशेष काइसेकी",
-            menu1: "लगातार बसाई",
-            menu2: "पुनरावर्ती",
             search: "परिकारको नाम वा श्रेणी खोज्नुहोस्..."
         }
     };
@@ -660,10 +673,9 @@ function toggleLanguage() {
     document.getElementById('tabRecipes').textContent = lang.tabRecipes;
     document.getElementById('tabFoodSafety').textContent = lang.tabFoodSafety;
     document.getElementById('tabUpdates').textContent = tabUpdatesLabel;
-    document.getElementById('menuBtn0').textContent = lang.menu0;
-    document.getElementById('menuBtn1').textContent = lang.menu1;
-    document.getElementById('menuBtn2').textContent = lang.menu2;
     document.getElementById('searchInput').placeholder = lang.search;
+    renderSeasonButtons();
+    renderMenuButtons();
     renderUpdateNotices();
     renderUpdateBanner();
     displayFoodSafety();
@@ -749,22 +761,48 @@ document.addEventListener('keydown', (e) => {
 
 console.log('✅ キッチンマニュアルアプリが正常に起動しました！');
 
-// app.js に以下を追加・修正
+// シーズンボタンのラベルを言語に合わせて更新する
+function renderSeasonButtons() {
+    document.querySelectorAll('.season-btn').forEach(btn => {
+        const season = menuData.seasons[btn.dataset.season];
+        if (!season) return;
+        btn.textContent = currentLanguage === 'ja' ? season.label_ja : season.label_ne;
+    });
+}
+
+// メニューボタンを動的に生成する
+function renderMenuButtons() {
+    const seasonData = menuData.seasons[currentSeason];
+    const menuSelector = document.getElementById('menuSelector');
+    if (!seasonData.menus || seasonData.menus.length === 0) {
+        menuSelector.innerHTML = '';
+        return;
+    }
+    menuSelector.innerHTML = seasonData.menus.map((menu, index) => {
+        const label = currentLanguage === 'ja' ? menu.name : (menu.name_ne || menu.name);
+        const isActive = index === currentMenuIndex ? ' active' : '';
+        return `<button class="menu-select-btn${isActive}" onclick="switchMenu(${index})">${label}</button>`;
+    }).join('');
+}
+
+// シーズンを切り替える
+function switchSeason(season) {
+    currentSeason = season;
+    currentMenuIndex = 0;
+    document.querySelectorAll('.season-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.season === season);
+    });
+    renderMenuButtons();
+    displayMenu(0);
+    displayRecipeGrid();
+}
 
 // 献立を切り替える関数
 function switchMenu(index) {
     currentMenuIndex = index;
-    
-    // ボタンのactiveクラスを更新
     document.querySelectorAll('.menu-select-btn').forEach((btn, idx) => {
-        if (idx === index) {
-            btn.classList.add('active');
-        } else {
-            btn.classList.remove('active');
-        }
+        btn.classList.toggle('active', idx === index);
     });
-    
-    // 表示を更新
     displayMenu(index);
 }
 

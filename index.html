@@ -41,19 +41,22 @@
                 <button id="clearSearch" class="btn btn-clear" style="display: none;">✕ クリア</button>
             </div>
 
+            <div class="season-selector" id="seasonSelector">
+                <button class="season-btn active" data-season="spring">春</button>
+                <button class="season-btn" data-season="summer">夏</button>
+                <button class="season-btn" data-season="autumn">秋</button>
+                <button class="season-btn" data-season="winter">冬</button>
+            </div>
+
             <div class="tabs">
-                <button class="tab-button active" data-tab="menus" id="tabMenus">2026春の献立</button>
-                <button class="tab-button" data-tab="recipes" id="tabRecipes">2026春のレシピ</button>
+                <button class="tab-button active" data-tab="menus" id="tabMenus">献立</button>
+                <button class="tab-button" data-tab="recipes" id="tabRecipes">レシピ</button>
                 <button class="tab-button" data-tab="foodSafety" id="tabFoodSafety">食品衛生</button>
                 <button class="tab-button" data-tab="updates" id="tabUpdates">変更のお知らせ</button>
             </div>
 
             <div id="menus" class="tab-content active">
-                <div class="menu-selector" id="menuSelector">
-                    <button class="menu-select-btn active" onclick="switchMenu(0)" id="menuBtn0">春の極上懐石</button>
-                    <button class="menu-select-btn" onclick="switchMenu(1)" id="menuBtn1">連泊献立</button>
-                    <button class="menu-select-btn" onclick="switchMenu(2)" id="menuBtn2">リピーター献立</button>
-                </div>
+                <div class="menu-selector" id="menuSelector"></div>
 
                 <div id="menuContent" class="content-area"></div>
             </div>
@@ -93,7 +96,7 @@
 
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2025 キッチンマニュアル - 令和八年 春</p>
+            <p>&copy; 2025 キッチンマニュアル</p>
         </div>
     </footer>
 
