@@ -420,6 +420,13 @@ function displayMenu(index) {
 
         const categoryName = currentLanguage === 'ja' ? categories[key].name_ja : categories[key].name_ne || categories[key].name_ja;
 
+        // 検索中は表示アイテムが1件もないカテゴリをスキップ
+        const visibleItems = categories[key].items.filter(item => isMenuItemVisible(item));
+        const visibleChildItems = childKeys.some(childKey =>
+            categories[childKey].items.some(item => isMenuItemVisible(item))
+        );
+        if (searchTerm && visibleItems.length === 0 && !visibleChildItems) return;
+
         html += `<div class="menu-category">
             <div class="category-header collapsible" onclick="toggleCategory(this)">
                 <span>${categoryName}</span>
@@ -427,10 +434,8 @@ function displayMenu(index) {
             </div>
             <div class="category-items">`;
 
-        categories[key].items.forEach(item => {
-            if (isMenuItemVisible(item)) {
-                html += renderMenuItemHtml(item);
-            }
+        visibleItems.forEach(item => {
+            html += renderMenuItemHtml(item);
         });
 
         // 子カテゴリーをサブグループとして表示
@@ -446,10 +451,8 @@ function displayMenu(index) {
             html += `<div class="menu-sub-group">
                 <div class="sub-group-label">${subLabel}</div>`;
 
-            child.items.forEach(item => {
-                if (isMenuItemVisible(item)) {
-                    html += renderMenuItemHtml(item, true);
-                }
+            visibleSubItems.forEach(item => {
+                html += renderMenuItemHtml(item, true);
             });
 
             html += `</div>`;
@@ -465,7 +468,8 @@ function isMenuItemVisible(item) {
     if (searchTerm === '') return true;
     return item.name_ja.toLowerCase().includes(searchTerm) ||
            (item.name_ne && item.name_ne.toLowerCase().includes(searchTerm)) ||
-           item.category_ja.toLowerCase().includes(searchTerm);
+           item.category_ja.toLowerCase().includes(searchTerm) ||
+           (item.category_ne && item.category_ne.toLowerCase().includes(searchTerm));
 }
 
 function renderMenuItemHtml(item, isSub = false) {
@@ -761,13 +765,15 @@ document.addEventListener('keydown', (e) => {
 
 console.log('✅ キッチンマニュアルアプリが正常に起動しました！');
 
-// シーズンボタンのラベルを言語に合わせて更新する
+// シーズンボタンを menu-data.js の seasons から動的生成する
 function renderSeasonButtons() {
-    document.querySelectorAll('.season-btn').forEach(btn => {
-        const season = menuData.seasons[btn.dataset.season];
-        if (!season) return;
-        btn.textContent = currentLanguage === 'ja' ? season.label_ja : season.label_ne;
-    });
+    const selector = document.getElementById('seasonSelector');
+    selector.innerHTML = Object.keys(menuData.seasons).map(key => {
+        const season = menuData.seasons[key];
+        const label = currentLanguage === 'ja' ? season.label_ja : season.label_ne;
+        const isActive = key === currentSeason ? ' active' : '';
+        return `<button class="season-btn${isActive}" data-season="${key}" onclick="switchSeason('${key}')">${label}</button>`;
+    }).join('');
 }
 
 // メニューボタンを動的に生成する
