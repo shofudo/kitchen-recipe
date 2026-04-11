@@ -1,5 +1,6 @@
 // menu-data.js
 const menuData = {
+  "basicRecipes": [],
   "seasons": {
     "spring": {
       "label_ja": "春",

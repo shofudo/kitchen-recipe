@@ -57,6 +57,21 @@ function setupEventListeners() {
             switchTab(e.target.dataset.tab);
         });
     });
+
+    // レシピグリッドのイベントデリゲーション（アコーディオン＋カード）
+    document.getElementById('recipeGrid').addEventListener('click', (e) => {
+        const accordionBtn = e.target.closest('[data-accordion]');
+        if (accordionBtn) {
+            const type = accordionBtn.dataset.accordion;
+            recipeAccordionState[type] = !recipeAccordionState[type];
+            displayRecipeGrid();
+            return;
+        }
+        const card = e.target.closest('[data-recipe-type]');
+        if (card) {
+            showRecipeDetail(card.dataset.recipeType, parseInt(card.dataset.recipeIndex, 10));
+        }
+    });
     
     // 言語切り替え
     document.getElementById('languageToggle').addEventListener('click', toggleLanguage);
@@ -490,34 +505,92 @@ function toggleCategory(header) {
 // ============================================
 // レシピグリッドの表示
 // ============================================
+// レシピセクションの開閉状態
+const recipeAccordionState = { basic: false, seasonal: false };
+
 function displayRecipeGrid() {
     const recipeGrid = document.getElementById('recipeGrid');
-    const recipes = menuData.seasons[currentSeason].recipes || [];
+    const basicRecipes = menuData.basicRecipes || [];
+    const seasonalRecipes = menuData.seasons[currentSeason].recipes || [];
+
+    const basicOpen = recipeAccordionState.basic;
+    const seasonalOpen = recipeAccordionState.seasonal;
+
     let html = '';
 
-    if (recipes.length === 0) {
-        recipeGrid.innerHTML = `<p style="text-align:center;color:#999;">${currentLanguage === 'ja' ? '準備中です' : 'तयारी भइरहेको छ'}</p>`;
-        return;
-    }
+    // ── 基本のレシピ セクション ──
+    const basicFiltered = basicRecipes.filter(recipe =>
+        searchTerm === '' ||
+        recipe.title_ja.toLowerCase().includes(searchTerm) ||
+        (recipe.title_ne && recipe.title_ne.toLowerCase().includes(searchTerm)) ||
+        recipe.name.toLowerCase().includes(searchTerm)
+    );
 
-    recipes.forEach((recipe, index) => {
-        const isVisible = searchTerm === '' || 
-                          recipe.title_ja.toLowerCase().includes(searchTerm) ||
-                          recipe.title_ne.toLowerCase().includes(searchTerm) ||
-                          recipe.name.toLowerCase().includes(searchTerm);
-        
-        if (isVisible) {
+    const basicLabel = currentLanguage === 'ja' ? '基本のレシピ' : 'आधारभूत रेसिपी';
+    html += `
+        <div class="recipe-accordion">
+            <button class="recipe-accordion-header ${basicOpen ? 'open' : ''}" data-accordion="basic">
+                <span>${basicLabel}</span>
+                <span class="recipe-accordion-arrow">${basicOpen ? '▲' : '▼'}</span>
+            </button>
+            <div class="recipe-accordion-body ${basicOpen ? '' : 'recipe-accordion-body--closed'}">
+    `;
+    if (basicFiltered.length === 0) {
+        html += `<p class="recipe-empty-msg">${currentLanguage === 'ja' ? '準備中です' : 'तयारी भइरहेको छ'}</p>`;
+    } else {
+        html += '<div class="recipe-grid-inner">';
+        basicFiltered.forEach((recipe, index) => {
             const title = currentLanguage === 'ja' ? recipe.title_ja : recipe.title_ne || recipe.title_ja;
-            
             html += `
-                <div class="recipe-card" onclick="showRecipeDetail(${index})">
+                <div class="recipe-card" data-recipe-type="basic" data-recipe-index="${index}">
                     <div class="recipe-card-title">${highlightText(title)}</div>
                 </div>
             `;
-        }
-    });
-    
-    recipeGrid.innerHTML = html || '<p style="text-align: center; color: #999;">検索結果がありません</p>';
+        });
+        html += '</div>';
+    }
+    html += '</div></div>';
+
+    // ── 季節のレシピ セクション ──
+    const seasonLabel = currentLanguage === 'ja'
+        ? menuData.seasons[currentSeason].label_ja
+        : menuData.seasons[currentSeason].label_ne;
+    const seasonalLabel = currentLanguage === 'ja'
+        ? `季節のレシピ（${seasonLabel}）`
+        : `मौसमी रेसिपी（${seasonLabel}）`;
+
+    const seasonalFiltered = seasonalRecipes.filter(recipe =>
+        searchTerm === '' ||
+        recipe.title_ja.toLowerCase().includes(searchTerm) ||
+        (recipe.title_ne && recipe.title_ne.toLowerCase().includes(searchTerm)) ||
+        recipe.name.toLowerCase().includes(searchTerm)
+    );
+
+    html += `
+        <div class="recipe-accordion">
+            <button class="recipe-accordion-header ${seasonalOpen ? 'open' : ''}" data-accordion="seasonal">
+                <span>${seasonalLabel}</span>
+                <span class="recipe-accordion-arrow">${seasonalOpen ? '▲' : '▼'}</span>
+            </button>
+            <div class="recipe-accordion-body ${seasonalOpen ? '' : 'recipe-accordion-body--closed'}">
+    `;
+    if (seasonalFiltered.length === 0) {
+        html += `<p class="recipe-empty-msg">${currentLanguage === 'ja' ? '準備中です' : 'तयारी भइरहेको छ'}</p>`;
+    } else {
+        html += '<div class="recipe-grid-inner">';
+        seasonalFiltered.forEach((recipe, index) => {
+            const title = currentLanguage === 'ja' ? recipe.title_ja : recipe.title_ne || recipe.title_ja;
+            html += `
+                <div class="recipe-card" data-recipe-type="seasonal" data-recipe-index="${index}">
+                    <div class="recipe-card-title">${highlightText(title)}</div>
+                </div>
+            `;
+        });
+        html += '</div>';
+    }
+    html += '</div></div>';
+
+    recipeGrid.innerHTML = html;
 }
 
 // ============================================
@@ -526,8 +599,10 @@ function displayRecipeGrid() {
 // --- ここから一番下まで貼り付け ---
 
 // レシピ詳細の表示（ここからファイルの最後までを貼り替え）
-function showRecipeDetail(index) {
-    const recipe = menuData.seasons[currentSeason].recipes[index];
+function showRecipeDetail(type, index) {
+    const recipe = type === 'basic'
+        ? menuData.basicRecipes[index]
+        : menuData.seasons[currentSeason].recipes[index];
     const modal = document.getElementById('recipeModal');
     const detailDiv = document.getElementById('recipeDetail');
     
@@ -541,7 +616,7 @@ function showRecipeDetail(index) {
         html += `
             <div class="calc-section" style="background: #f0f7ff; padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 2px solid #3498db;">
                 <label style="font-weight: bold; display: block; margin-bottom: 5px;">${label}</label>
-                <input type="number" id="baseWeight" placeholder="例: 1000" style="width: 100%; padding: 10px; font-size: 1.2rem; border-radius: 5px; border: 1px solid #ccc;" oninput="updateCalculations(${index})">
+                <input type="number" id="baseWeight" placeholder="例: 1000" style="width: 100%; padding: 10px; font-size: 1.2rem; border-radius: 5px; border: 1px solid #ccc;" oninput="updateCalculations('${type}', ${index})">
             </div>
         `;
     }
@@ -613,12 +688,14 @@ function showRecipeDetail(index) {
 }
 
 // 計算を実行する命令
-function updateCalculations(index) {
+function updateCalculations(type, index) {
     const weightInput = document.getElementById('baseWeight');
     if (!weightInput) return;
 
     const weight = weightInput.value;
-    const recipe = menuData.seasons[currentSeason].recipes[index];
+    const recipe = type === 'basic'
+        ? menuData.basicRecipes[index]
+        : menuData.seasons[currentSeason].recipes[index];
 
     recipe.ingredients.forEach((item, i) => {
         const resultElement = document.getElementById(`res-${i}`);
