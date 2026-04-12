@@ -814,14 +814,18 @@ function toggleLanguage() {
             tabMenus: "献立",
             tabRecipes: "レシピ",
             tabFoodSafety: "食品衛生",
-            search: "料理名やカテゴリーで検索..."
+            search: "料理名やカテゴリーで検索...",
+            viewDetail: "詳細ビュー",
+            viewSimple: "献立ビュー"
         },
         ne: {
             title: "किचन म्यानुअल",
             tabMenus: "मेनु",
             tabRecipes: "रेसिपी",
             tabFoodSafety: "खाद्य स्वच्छता",
-            search: "परिकारको नाम वा श्रेणी खोज्नुहोस्..."
+            search: "परिकारको नाम वा श्रेणी खोज्नुहोस्...",
+            viewDetail: "विस्तृत दृश्य",
+            viewSimple: "मेनु दृश्य"
         }
     };
 
@@ -833,6 +837,8 @@ function toggleLanguage() {
     document.getElementById('tabFoodSafety').textContent = lang.tabFoodSafety;
     document.getElementById('tabUpdates').textContent = tabUpdatesLabel;
     document.getElementById('searchInput').placeholder = lang.search;
+    document.getElementById('viewDetailBtn').textContent = lang.viewDetail;
+    document.getElementById('viewSimpleBtn').textContent = lang.viewSimple;
     renderSeasonButtons();
     renderMenuButtons();
     renderUpdateNotices();
