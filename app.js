@@ -6,6 +6,7 @@ let currentSeason = 'spring'; // 'spring' | 'summer' | 'autumn' | 'winter'
 let currentMenuIndex = 0;
 let searchTerm = '';
 let showAllUpdates = false;
+let currentView = 'detail'; // 'detail' または 'simple'
 
 // 運用ルール:
 // 新しい「変更のお知らせ」は必ず先頭に追加し、date は更新日を 'YYYY-MM-DD' で直接記入してください。
@@ -391,9 +392,23 @@ function escapeHtmlAttribute(value) {
 }
 
 // ============================================
+// 献立ビュー切り替え
+// ============================================
+function setMenuView(view) {
+    currentView = view;
+    document.getElementById('viewDetailBtn').classList.toggle('active', view === 'detail');
+    document.getElementById('viewSimpleBtn').classList.toggle('active', view === 'simple');
+    displayMenu(currentMenuIndex);
+}
+
+// ============================================
 // 献立の表示
 // ============================================
 function displayMenu(index) {
+    if (currentView === 'simple') {
+        displayMenuSimple(index);
+        return;
+    }
     const seasonData = menuData.seasons[currentSeason];
     const menuContent = document.getElementById('menuContent');
     if (!seasonData.menus || seasonData.menus.length === 0) {
@@ -476,6 +491,69 @@ function displayMenu(index) {
         html += `</div></div>`;
     });
 
+    menuContent.innerHTML = html;
+}
+
+function displayMenuSimple(index) {
+    const seasonData = menuData.seasons[currentSeason];
+    const menuContent = document.getElementById('menuContent');
+    const isJa = currentLanguage === 'ja';
+    if (!seasonData.menus || seasonData.menus.length === 0) {
+        menuContent.innerHTML = `<div style="text-align:center;padding:40px;color:var(--text-light);">${isJa ? '準備中です' : 'तयारी भइरहेको छ'}</div>`;
+        return;
+    }
+    const menu = seasonData.menus[index];
+
+    const categories = {};
+    const categoryOrder = [];
+    menu.items.forEach(item => {
+        const key = item.category_ja;
+        if (!categories[key]) {
+            categories[key] = { name_ne: item.category_ne, items: [] };
+            categoryOrder.push(key);
+        }
+        categories[key].items.push(item);
+    });
+
+    function findParentKey(key) {
+        return categoryOrder.find(k => k !== key && key.startsWith(k + '・')) || null;
+    }
+
+    const title = isJa ? menu.title_ja : (menu.title_ne || menu.title_ja);
+    const processedKeys = new Set();
+    let html = `<div class="simple-menu"><h2 class="simple-menu-title">${title}</h2>`;
+
+    categoryOrder.forEach(key => {
+        if (processedKeys.has(key)) return;
+        processedKeys.add(key);
+        if (findParentKey(key)) return;
+
+        const childKeys = categoryOrder.filter(k => k !== key && k.startsWith(key + '・'));
+        childKeys.forEach(k => processedKeys.add(k));
+
+        const catName = isJa ? key : (categories[key].name_ne || key);
+        html += `<div class="simple-category">
+            <div class="simple-category-name">${catName}</div>`;
+
+        categories[key].items.forEach(item => {
+            const name = isJa ? item.name_ja : (item.name_ne || item.name_ja);
+            html += `<div class="simple-item">${name}</div>`;
+        });
+
+        childKeys.forEach(childKey => {
+            const subLabelJa = childKey.slice(key.length + 1);
+            const subLabel = isJa ? subLabelJa : (categories[childKey].name_ne || subLabelJa);
+            html += `<div class="simple-sub-label">${subLabel}</div>`;
+            categories[childKey].items.forEach(item => {
+                const name = isJa ? item.name_ja : (item.name_ne || item.name_ja);
+                html += `<div class="simple-item simple-item-sub">${name}</div>`;
+            });
+        });
+
+        html += `</div>`;
+    });
+
+    html += `</div>`;
     menuContent.innerHTML = html;
 }
 

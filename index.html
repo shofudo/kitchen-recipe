@@ -53,6 +53,13 @@
             <div id="menus" class="tab-content active">
                 <div class="menu-selector" id="menuSelector"></div>
 
+                <div class="view-toggle-bar">
+                    <div class="view-toggle-group" role="group" aria-label="表示切り替え">
+                        <button id="viewDetailBtn" class="view-toggle-btn active" onclick="setMenuView('detail')">詳細ビュー</button>
+                        <button id="viewSimpleBtn" class="view-toggle-btn" onclick="setMenuView('simple')">献立ビュー</button>
+                    </div>
+                </div>
+
                 <div id="menuContent" class="content-area"></div>
             </div>
 
