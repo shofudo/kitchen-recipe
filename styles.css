@@ -1699,3 +1699,13 @@ body.lightbox-open {
     padding-left: 20px;
     color: var(--text-light);
 }
+
+/* ネパール語表示時のかな読み */
+.simple-kana {
+    display: block;
+    font-size: 0.72rem;
+    color: var(--text-light);
+    letter-spacing: 0.04em;
+    margin-top: 1px;
+    opacity: 0.75;
+}

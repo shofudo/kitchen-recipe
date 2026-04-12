@@ -519,9 +519,23 @@ function displayMenuSimple(index) {
         return categoryOrder.find(k => k !== key && key.startsWith(k + '・')) || null;
     }
 
+    // かな読みを取得するヘルパー（ネパール語表示時のみ）
+    function getCatKana(key) {
+        if (isJa) return '';
+        return (kanaMap && kanaMap.categories && kanaMap.categories[key]) || '';
+    }
+    function getItemKana(nameJa) {
+        if (isJa) return '';
+        return (kanaMap && kanaMap.items && kanaMap.items[nameJa]) || '';
+    }
+    function kanaHtml(kana) {
+        return kana ? `<span class="simple-kana">${kana}</span>` : '';
+    }
+
     const title = isJa ? menu.title_ja : (menu.title_ne || menu.title_ja);
+    const titleKana = (!isJa && kanaMap && kanaMap.menus && kanaMap.menus[menu.title_ja]) || '';
     const processedKeys = new Set();
-    let html = `<div class="simple-menu"><h2 class="simple-menu-title">${title}</h2>`;
+    let html = `<div class="simple-menu"><h2 class="simple-menu-title">${title}${kanaHtml(titleKana)}</h2>`;
 
     categoryOrder.forEach(key => {
         if (processedKeys.has(key)) return;
@@ -532,21 +546,25 @@ function displayMenuSimple(index) {
         childKeys.forEach(k => processedKeys.add(k));
 
         const catName = isJa ? key : (categories[key].name_ne || key);
+        const catKana = getCatKana(key);
         html += `<div class="simple-category">
-            <div class="simple-category-name">${catName}</div>`;
+            <div class="simple-category-name">${catName}${kanaHtml(catKana)}</div>`;
 
         categories[key].items.forEach(item => {
             const name = isJa ? item.name_ja : (item.name_ne || item.name_ja);
-            html += `<div class="simple-item">${name}</div>`;
+            const kana = getItemKana(item.name_ja);
+            html += `<div class="simple-item">${name}${kanaHtml(kana)}</div>`;
         });
 
         childKeys.forEach(childKey => {
             const subLabelJa = childKey.slice(key.length + 1);
             const subLabel = isJa ? subLabelJa : (categories[childKey].name_ne || subLabelJa);
-            html += `<div class="simple-sub-label">${subLabel}</div>`;
+            const subKana = getCatKana(childKey);
+            html += `<div class="simple-sub-label">${subLabel}${kanaHtml(subKana)}</div>`;
             categories[childKey].items.forEach(item => {
                 const name = isJa ? item.name_ja : (item.name_ne || item.name_ja);
-                html += `<div class="simple-item simple-item-sub">${name}</div>`;
+                const kana = getItemKana(item.name_ja);
+                html += `<div class="simple-item simple-item-sub">${name}${kanaHtml(kana)}</div>`;
             });
         });
 
