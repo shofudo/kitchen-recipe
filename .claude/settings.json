@@ -11,7 +11,10 @@
       "Bash(python -c \"import json; d=json.load\\(open\\('data.json',encoding='utf-8'\\)\\); print\\('OK'\\); print\\([x.get\\('name'\\) for x in d['sheets']]\\)\")",
       "Bash(python.exe -c \"import json; d=json.load\\(open\\('data.json',encoding='utf-8'\\)\\); print\\('OK'\\); print\\([x.get\\('name'\\) for x in d['sheets']]\\)\")",
       "Bash(C:/Users/saria/AppData/Local/Microsoft/WindowsApps/python.exe --version)",
-      "Bash(powershell -Command \"Get-Content 'c:/Users/saria/Desktop/Projects/kitchen-recipe/data.json' | ConvertFrom-Json | Select-Object -ExpandProperty sheets | Select-Object name\")"
+      "Bash(powershell -Command \"Get-Content 'c:/Users/saria/Desktop/Projects/kitchen-recipe/data.json' | ConvertFrom-Json | Select-Object -ExpandProperty sheets | Select-Object name\")",
+      "Bash(node -e ':*)",
+      "Read(//usr/**)",
+      "Bash(command -v node)"
     ]
   }
 }

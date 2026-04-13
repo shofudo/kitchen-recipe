@@ -714,10 +714,13 @@ function showRecipeDetail(type, index) {
     // ⚖️ 計算ベースがある場合だけ、入力欄を表示
     if (recipe.calc_base_label_ja) {
         const label = currentLanguage === 'ja' ? recipe.calc_base_label_ja : recipe.calc_base_label_ne;
+        const placeholder = currentLanguage === 'ja'
+            ? (recipe.calc_placeholder_ja || '例: 1000')
+            : (recipe.calc_placeholder_ne || 'उदाहरण: 1000');
         html += `
             <div class="calc-section" style="background: #f0f7ff; padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 2px solid #3498db;">
                 <label style="font-weight: bold; display: block; margin-bottom: 5px;">${label}</label>
-                <input type="number" id="baseWeight" placeholder="例: 1000" style="width: 100%; padding: 10px; font-size: 1.2rem; border-radius: 5px; border: 1px solid #ccc;" oninput="updateCalculations('${type}', ${index})">
+                <input type="number" id="baseWeight" placeholder="${placeholder}" style="width: 100%; padding: 10px; font-size: 1.2rem; border-radius: 5px; border: 1px solid #ccc;" oninput="updateCalculations('${type}', ${index})">
             </div>
         `;
     }
