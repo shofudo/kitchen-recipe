@@ -6,7 +6,7 @@ let currentSeason = 'spring'; // 'spring' | 'summer' | 'autumn' | 'winter'
 let currentMenuIndex = 0;
 let searchTerm = '';
 let showAllUpdates = false;
-let currentView = 'detail'; // 'detail' または 'simple'
+let currentView = 'simple';
 
 // 運用ルール:
 // 新しい「変更のお知らせ」は必ず先頭に追加し、date は更新日を 'YYYY-MM-DD' で直接記入してください。
@@ -837,18 +837,14 @@ function toggleLanguage() {
             tabMenus: "献立",
             tabRecipes: "レシピ",
             tabFoodSafety: "食品衛生",
-            search: "料理名やカテゴリーで検索...",
-            viewDetail: "詳細ビュー",
-            viewSimple: "献立ビュー"
+            search: "料理名やカテゴリーで検索..."
         },
         ne: {
             title: "किचन म्यानुअल",
             tabMenus: "मेनु",
             tabRecipes: "रेसिपी",
             tabFoodSafety: "खाद्य स्वच्छता",
-            search: "परिकारको नाम वा श्रेणी खोज्नुहोस्...",
-            viewDetail: "विस्तृत दृश्य",
-            viewSimple: "मेनु दृश्य"
+            search: "परिकारको नाम वा श्रेणी खोज्नुहोस्..."
         }
     };
 
@@ -860,8 +856,6 @@ function toggleLanguage() {
     document.getElementById('tabFoodSafety').textContent = lang.tabFoodSafety;
     document.getElementById('tabUpdates').textContent = tabUpdatesLabel;
     document.getElementById('searchInput').placeholder = lang.search;
-    document.getElementById('viewDetailBtn').textContent = lang.viewDetail;
-    document.getElementById('viewSimpleBtn').textContent = lang.viewSimple;
     renderSeasonButtons();
     renderMenuButtons();
     renderUpdateNotices();
