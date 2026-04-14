@@ -25,7 +25,7 @@
 }
 
 body {
-    font-family: 'Hiragino Sans', 'Yu Gothic', 'Meiryo', sans-serif;
+    font-family: 'BIZ UDPGothic', 'Hiragino Sans', 'Yu Gothic', 'Meiryo', sans-serif;
     background:
         radial-gradient(circle at top left, rgba(138, 104, 68, 0.16), transparent 32%),
         linear-gradient(180deg, #f2ede3 0%, var(--bg-color) 48%, #ddd4c8 100%);
@@ -837,10 +837,7 @@ body.lightbox-open {
    レシピグリッド
 ============================================ */
 .recipe-accordion {
-    margin-bottom: 12px;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    overflow: hidden;
+    margin-bottom: 8px;
 }
 
 .recipe-accordion-header {
@@ -848,34 +845,36 @@ body.lightbox-open {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 14px 18px;
-    background: rgba(138, 104, 68, 0.07);
+    padding: 8px 4px;
+    background: transparent;
     border: none;
+    border-bottom: 1px solid var(--border-color);
     cursor: pointer;
-    font-size: 1.05rem;
-    font-weight: 700;
+    font-size: 0.82rem;
+    font-weight: 600;
     color: var(--accent-color);
     text-align: left;
-    transition: background 0.2s;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: color 0.2s;
 }
 
 .recipe-accordion-header:hover {
-    background: rgba(138, 104, 68, 0.14);
+    color: var(--accent-light);
 }
 
 .recipe-accordion-header.open {
-    background: rgba(138, 104, 68, 0.12);
-    border-bottom: 1px solid var(--border-color);
+    border-bottom-color: var(--accent-color);
 }
 
 .recipe-accordion-arrow {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     color: var(--text-light);
 }
 
 .recipe-accordion-body {
-    padding: 16px;
-    background: var(--bg-panel);
+    padding: 8px 0 4px;
+    background: transparent;
 }
 
 .recipe-accordion-body--closed {
@@ -885,14 +884,15 @@ body.lightbox-open {
 .recipe-empty-msg {
     text-align: center;
     color: #999;
-    padding: 16px 0;
+    padding: 10px 0;
+    font-size: 0.9rem;
 }
 
 .recipe-grid-inner {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 18px;
-    margin-bottom: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 4px;
 }
 
 .recipe-grid {
@@ -900,53 +900,49 @@ body.lightbox-open {
 }
 
 .recipe-card {
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.75), rgba(247, 243, 236, 0.98));
-    border-radius: 8px;
-    padding: 22px;
-    box-shadow: var(--shadow);
+    background-color: rgba(255, 255, 255, 0.56);
+    border-radius: 6px;
+    padding: 13px 16px;
     cursor: pointer;
-    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, background-color 0.25s ease;
-    border: 1px solid rgba(149, 130, 107, 0.24);
-    min-height: 100%;
+    transition: transform 0.25s ease, border-color 0.25s ease, background-color 0.25s ease;
+    border: 1px solid rgba(149, 130, 107, 0.22);
+    border-left: 3px solid var(--accent-color);
 }
 
 .recipe-card:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-hover);
-    border-color: rgba(138, 104, 68, 0.5);
+    background-color: rgba(255, 255, 255, 0.82);
+    transform: translateX(3px);
+    border-color: rgba(149, 130, 107, 0.38);
 }
 
 .recipe-card-title {
-    font-size: 1.28rem;
+    font-size: 1.05rem;
     font-weight: 700;
-    color: var(--primary-color);
-    margin-bottom: 14px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    color: var(--text-dark);
+    margin-bottom: 0;
     line-height: 1.45;
 }
 
 .recipe-card-subtitle {
-    font-size: 1rem;
+    font-size: 0.92rem;
     color: var(--text-light);
-    margin-bottom: 15px;
+    margin-top: 2px;
 }
 
 .recipe-card-info {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
-    font-size: 0.86rem;
+    gap: 6px;
+    font-size: 0.82rem;
     color: var(--text-light);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.02em;
+    margin-top: 4px;
 }
 
 .recipe-card-info span {
-    padding: 4px 8px;
-    background: rgba(138, 104, 68, 0.08);
-    border-radius: 999px;
+    padding: 2px 6px;
+    background: rgba(138, 104, 68, 0.07);
+    border-radius: 4px;
 }
 
 /* ============================================
@@ -974,8 +970,8 @@ body.lightbox-open {
 .modal-content {
     background-color: var(--card-bg);
     border-radius: 10px;
-    padding: 40px;
-    max-width: 800px;
+    padding: 28px 28px 24px;
+    max-width: 700px;
     width: 100%;
     position: relative;
     border: 1px solid rgba(149, 130, 107, 0.24);
@@ -1007,29 +1003,32 @@ body.lightbox-open {
 }
 
 .recipe-detail-title {
-    font-size: 1.9rem;
+    font-size: 1.25rem;
+    font-weight: 700;
     color: var(--primary-color);
-    margin-bottom: 14px;
-    line-height: 1.4;
+    margin-bottom: 16px;
+    line-height: 1.45;
+    padding-right: 36px;
 }
 
 .recipe-detail-subtitle {
-    font-size: 1.05rem;
+    font-size: 0.95rem;
     color: var(--text-light);
-    margin-bottom: 30px;
+    margin-bottom: 16px;
 }
 
 .recipe-section {
-    margin-bottom: 28px;
+    margin-bottom: 18px;
 }
 
 .recipe-section-title {
-    font-size: 1.1rem;
-    color: var(--primary-color);
-    margin-bottom: 14px;
-    padding-bottom: 10px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--accent-color);
+    margin-bottom: 8px;
+    padding-bottom: 6px;
     border-bottom: 1px solid var(--border-color);
-    letter-spacing: 0.08em;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
 }
 
@@ -1038,11 +1037,11 @@ body.lightbox-open {
 }
 
 .recipe-list li {
-    padding: 14px 16px;
-    background-color: rgba(255, 255, 255, 0.72);
-    margin-bottom: 10px;
+    padding: 9px 13px;
+    background-color: rgba(255, 255, 255, 0.56);
+    margin-bottom: 5px;
     border-radius: 6px;
-    border: 1px solid rgba(149, 130, 107, 0.16);
+    border: 1px solid rgba(149, 130, 107, 0.18);
     border-left: 3px solid var(--success-color);
 }
 
@@ -1051,15 +1050,64 @@ body.lightbox-open {
 }
 
 .recipe-text-ja {
-    font-size: 1rem;
+    font-size: 0.97rem;
     color: var(--text-dark);
-    margin-bottom: 4px;
+    margin-bottom: 2px;
 }
 
 .recipe-text-ne {
-    font-size: 0.92rem;
+    font-size: 0.87rem;
     color: var(--text-light);
     font-style: normal;
+}
+
+/* 計算セクション */
+.calc-section {
+    background: rgba(149, 130, 107, 0.07);
+    padding: 12px 14px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    border: 1px solid rgba(149, 130, 107, 0.28);
+    border-left: 3px solid var(--accent-color);
+}
+
+.calc-section label {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    display: block;
+    margin-bottom: 6px;
+}
+
+.calc-section input {
+    width: 100%;
+    padding: 8px 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid var(--border-color);
+    background: var(--card-bg);
+    color: var(--text-dark);
+}
+
+.calc-result {
+    font-weight: 700;
+    color: var(--accent-color);
+    font-size: 0.95rem;
+    white-space: nowrap;
+    padding-left: 8px;
+}
+
+/* 補足セクション */
+.recipe-section--notes {
+    background: rgba(138, 104, 68, 0.05);
+    padding: 10px 13px;
+    border-radius: 6px;
+    border-left: 3px solid var(--border-strong);
+}
+
+.recipe-section-title--notes {
+    color: var(--accent-color);
+    border-bottom-color: var(--border-color);
 }
 
 /* ============================================
@@ -1302,8 +1350,7 @@ body.lightbox-open {
     }
 
     .recipe-grid-inner {
-        grid-template-columns: 1fr;
-        gap: 14px;
+        gap: 6px;
     }
 
     .modal-content {
@@ -1324,13 +1371,13 @@ body.lightbox-open {
     }
 
     .recipe-card {
-        padding: 18px;
-        border-radius: 14px;
+        padding: 15px 16px;
+        border-radius: 6px;
     }
 
     .recipe-card-title {
-        font-size: 1.12rem;
-        margin-bottom: 10px;
+        font-size: 1.05rem;
+        margin-bottom: 4px;
     }
 
     .recipe-card-info {
@@ -1497,17 +1544,16 @@ body.lightbox-open {
     }
 
     .recipe-grid-inner {
-        gap: 10px;
+        gap: 5px;
     }
 
     .recipe-card {
-        padding: 14px;
-        border-radius: 12px;
+        padding: 11px 13px;
+        border-radius: 6px;
     }
 
     .recipe-card-title {
         font-size: 0.98rem;
-        margin-bottom: 8px;
     }
 
     .recipe-card-info {

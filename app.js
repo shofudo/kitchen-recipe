@@ -718,9 +718,9 @@ function showRecipeDetail(type, index) {
             ? (recipe.calc_placeholder_ja || '例: 1000')
             : (recipe.calc_placeholder_ne || 'उदाहरण: 1000');
         html += `
-            <div class="calc-section" style="background: #f0f7ff; padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 2px solid #3498db;">
-                <label style="font-weight: bold; display: block; margin-bottom: 5px;">${label}</label>
-                <input type="number" id="baseWeight" placeholder="${placeholder}" style="width: 100%; padding: 10px; font-size: 1.2rem; border-radius: 5px; border: 1px solid #ccc;" oninput="updateCalculations('${type}', ${index})">
+            <div class="calc-section">
+                <label>${label}</label>
+                <input type="number" id="baseWeight" placeholder="${placeholder}" oninput="updateCalculations('${type}', ${index})">
             </div>
         `;
     }
@@ -743,7 +743,7 @@ function showRecipeDetail(type, index) {
                         <div class="recipe-text-ja">${item.text_ja}</div>
                         ${item.text_ne ? `<div class="recipe-text-ne">${item.text_ne}</div>` : ''}
                     </div>
-                    ${hasCalc ? `<div class="calc-result" id="res-${i}" style="font-weight: bold; color: #e74c3c; font-size: 1.2rem;">- g</div>` : ''}
+                    ${hasCalc ? `<div class="calc-result" id="res-${i}">- g</div>` : ''}
                 </li>
             `;
         });
@@ -771,8 +771,8 @@ function showRecipeDetail(type, index) {
     // ⚠️ 補足・備考セクション
     if (recipe.notes && recipe.notes.length > 0) {
         html += `
-            <div class="recipe-section" style="background: #fff5f5; padding: 10px; border-radius: 10px;">
-                <h3 class="recipe-section-title" style="color: #7f3428; border-bottom-color: #bda38c;">${currentLanguage === 'ja' ? '補足' : 'नोट'}</h3>
+            <div class="recipe-section recipe-section--notes">
+                <h3 class="recipe-section-title recipe-section-title--notes">${currentLanguage === 'ja' ? '補足' : 'नोट'}</h3>
                 <ul class="recipe-list">
         `;
         recipe.notes.forEach(item => {
