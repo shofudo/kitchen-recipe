@@ -558,7 +558,7 @@ function displayMenuSimple(index) {
         categories[key].items.forEach(item => {
             const name = isJa ? item.name_ja : (item.name_ne || item.name_ja);
             const kana = getItemKana(item.name_ja);
-            html += `<div class="simple-item">${name}${kanaHtml(kana)}</div>`;
+            html += `<div class="simple-item">${formatMenuAnnotations(name)}${kanaHtml(kana)}</div>`;
         });
 
         childKeys.forEach(childKey => {
@@ -569,7 +569,7 @@ function displayMenuSimple(index) {
             categories[childKey].items.forEach(item => {
                 const name = isJa ? item.name_ja : (item.name_ne || item.name_ja);
                 const kana = getItemKana(item.name_ja);
-                html += `<div class="simple-item simple-item-sub">${name}${kanaHtml(kana)}</div>`;
+                html += `<div class="simple-item simple-item-sub">${formatMenuAnnotations(name)}${kanaHtml(kana)}</div>`;
             });
         });
 
@@ -588,10 +588,21 @@ function isMenuItemVisible(item) {
            (item.category_ne && item.category_ne.toLowerCase().includes(searchTerm));
 }
 
+function formatMenuAnnotations(text) {
+    if (!text) return text;
+    // ※ で始まる行はテキスト全体を色付け
+    if (text.startsWith('※')) {
+        return '<span class="menu-note">' + text + '</span>';
+    }
+    // （...） の部分を色付け（全角・半角両対応）
+    text = text.replace(/[（(]([^）)]+)[）)]/g, (match) => '<span class="menu-paren">' + match + '</span>');
+    return text;
+}
+
 function renderMenuItemHtml(item, isSub = false) {
     return `<div class="menu-item${isSub ? ' sub-item' : ''}">
-        <div class="item-name-ja">${highlightText(item.name_ja)}</div>
-        ${item.name_ne ? `<div class="item-name-ne">${highlightText(item.name_ne)}</div>` : ''}
+        <div class="item-name-ja">${formatMenuAnnotations(highlightText(item.name_ja))}</div>
+        ${item.name_ne ? `<div class="item-name-ne">${formatMenuAnnotations(highlightText(item.name_ne))}</div>` : ''}
     </div>`;
 }
 
