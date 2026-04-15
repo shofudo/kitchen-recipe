@@ -299,7 +299,7 @@ function displayFoodSafety() {
                     <h3 class="food-rule-heading">${heading}</h3>
                     ${items.length ? `
                         <ul class="food-rule-list">
-                            ${items.map((item) => `<li>${item}</li>`).join('')}
+                            ${items.map((item) => `<li>${formatMenuAnnotations(item)}</li>`).join('')}
                         </ul>
                     ` : ''}
                     ${subheading ? `
@@ -307,7 +307,7 @@ function displayFoodSafety() {
                             <h4 class="food-rule-subheading">${subheading}</h4>
                             ${substeps.length ? `
                                 <ul class="food-rule-list compact">
-                                    ${substeps.map((item) => `<li>${item}</li>`).join('')}
+                                    ${substeps.map((item) => `<li>${formatMenuAnnotations(item)}</li>`).join('')}
                                 </ul>
                             ` : ''}
                         </section>
@@ -326,9 +326,9 @@ function displayFoodSafety() {
                             </figure>
                         </button>
                     ` : ''}
-                    ${warning ? `<div class="food-rule-warning">${warning}</div>` : ''}
-                    ${action ? `<div class="food-rule-action">${action}</div>` : ''}
-                    ${reason ? `<div class="food-rule-reason">${reason}</div>` : ''}
+                    ${warning ? `<div class="food-rule-warning">${formatMenuAnnotations(warning)}</div>` : ''}
+                    ${action ? `<div class="food-rule-action">${formatMenuAnnotations(action)}</div>` : ''}
+                    ${reason ? `<div class="food-rule-reason">${formatMenuAnnotations(reason)}</div>` : ''}
                 </div>
             </article>
         `;
@@ -751,8 +751,8 @@ function showRecipeDetail(type, index) {
             html += `
                 <li style="display: flex; justify-content: space-between; align-items: center;">
                     <div>
-                        <div class="recipe-text-ja">${item.text_ja}</div>
-                        ${item.text_ne ? `<div class="recipe-text-ne">${item.text_ne}</div>` : ''}
+                        <div class="recipe-text-ja">${formatMenuAnnotations(item.text_ja)}</div>
+                        ${item.text_ne ? `<div class="recipe-text-ne">${formatMenuAnnotations(item.text_ne)}</div>` : ''}
                     </div>
                     ${hasCalc ? `<div class="calc-result" id="res-${i}">- g</div>` : ''}
                 </li>
@@ -771,8 +771,8 @@ function showRecipeDetail(type, index) {
         recipe.instructions.forEach(item => {
             html += `
                 <li>
-                    <div class="recipe-text-ja">${item.text_ja}</div>
-                    <div class="recipe-text-ne">${item.text_ne}</div>
+                    <div class="recipe-text-ja">${formatMenuAnnotations(item.text_ja)}</div>
+                    <div class="recipe-text-ne">${formatMenuAnnotations(item.text_ne)}</div>
                 </li>
             `;
         });
@@ -789,8 +789,8 @@ function showRecipeDetail(type, index) {
         recipe.notes.forEach(item => {
             html += `
                 <li>
-                    <div class="recipe-text-ja">${item.text_ja}</div>
-                    <div class="recipe-text-ne">${item.text_ne}</div>
+                    <div class="recipe-text-ja">${formatMenuAnnotations(item.text_ja)}</div>
+                    <div class="recipe-text-ne">${formatMenuAnnotations(item.text_ne)}</div>
                 </li>
             `;
         });
