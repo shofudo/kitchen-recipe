@@ -590,9 +590,16 @@ function isMenuItemVisible(item) {
 
 function formatMenuAnnotations(text) {
     if (!text) return text;
-    // ※ で始まる行はテキスト全体を色付け
+    // ※ で始まる場合はテキスト全体を色付け
     if (text.startsWith('※')) {
         return '<span class="menu-note">' + text + '</span>';
+    }
+    // ※ が途中に現れる場合、※ 以降を色付け・それ以前は括弧処理
+    const noteIdx = text.indexOf('※');
+    if (noteIdx !== -1) {
+        const before = text.slice(0, noteIdx).replace(/[（(]([^）)]+)[）)]/g, (match) => '<span class="menu-paren">' + match + '</span>');
+        const note = text.slice(noteIdx);
+        return before + '<span class="menu-note">' + note + '</span>';
     }
     // （...） の部分を色付け（全角・半角両対応）
     text = text.replace(/[（(]([^）)]+)[）)]/g, (match) => '<span class="menu-paren">' + match + '</span>');
