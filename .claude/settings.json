@@ -16,7 +16,9 @@
       "Read(//usr/**)",
       "Bash(command -v node)",
       "Bash(node -e \"const m = require\\('./menu-data.js'\\); const s = m.menuData.seasons.summer; console.log\\('夏のメニュー数:', s.menus.length\\); s.menus.forEach\\(\\(menu,i\\) => console.log\\(i+1, menu.name, '- アイテム数:', menu.items.length\\)\\);\")",
-      "Bash(node -e \"try { eval\\(require\\('fs'\\).readFileSync\\('menu-data.js','utf8'\\)\\); console.log\\('夏のメニュー数:', menuData.seasons.summer.menus.length\\); menuData.seasons.summer.menus.forEach\\(\\(m,i\\) => console.log\\(i+1, m.name, '- アイテム数:', m.items.length\\)\\); } catch\\(e\\) { console.error\\(e.message\\); }\")"
+      "Bash(node -e \"try { eval\\(require\\('fs'\\).readFileSync\\('menu-data.js','utf8'\\)\\); console.log\\('夏のメニュー数:', menuData.seasons.summer.menus.length\\); menuData.seasons.summer.menus.forEach\\(\\(m,i\\) => console.log\\(i+1, m.name, '- アイテム数:', m.items.length\\)\\); } catch\\(e\\) { console.error\\(e.message\\); }\")",
+      "Bash(python3 -c ' *)",
+      "Bash(node -e ' *)"
     ]
   }
 }
