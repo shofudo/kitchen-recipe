@@ -19,6 +19,9 @@
       "Bash(node -e \"try { eval\\(require\\('fs'\\).readFileSync\\('menu-data.js','utf8'\\)\\); console.log\\('夏のメニュー数:', menuData.seasons.summer.menus.length\\); menuData.seasons.summer.menus.forEach\\(\\(m,i\\) => console.log\\(i+1, m.name, '- アイテム数:', m.items.length\\)\\); } catch\\(e\\) { console.error\\(e.message\\); }\")",
       "Bash(python3 -c ' *)",
       "Bash(node -e ' *)"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\saria\\.claude\\projects\\c--Users-saria-Desktop-Projects-kitchen-recipe\\memory"
     ]
   }
 }
