@@ -724,10 +724,17 @@ function showRecipeDetail(type, index) {
         : menuData.seasons[currentSeason].recipes[index];
     const modal = document.getElementById('recipeModal');
     const detailDiv = document.getElementById('recipeDetail');
+    detailDiv.className = recipe.display_variant ? `recipe-detail--${recipe.display_variant}` : '';
     
     const title = currentLanguage === 'ja' ? recipe.title_ja : recipe.title_ne || recipe.title_ja;
     
     let html = `<h2 class="recipe-detail-title">${title}</h2>`;
+
+    // レシピ固有の説明文がある場合は、各セクションの前に表示
+    const description = currentLanguage === 'ja' ? recipe.description_ja : recipe.description_ne;
+    if (description) {
+        html += `<p class="recipe-detail-description">${formatMenuAnnotations(description)}</p>`;
+    }
     
     // ⚖️ 計算ベースがある場合だけ、入力欄を表示
     if (recipe.calc_base_label_ja) {
@@ -743,11 +750,34 @@ function showRecipeDetail(type, index) {
         `;
     }
 
+    // 数値をひと目で確認したいレシピの分量カード
+    if (recipe.base_amounts && recipe.base_amounts.length > 0) {
+        const intro = currentLanguage === 'ja' ? recipe.base_amount_intro_ja : recipe.base_amount_intro_ne;
+        html += `
+            <div class="recipe-section recipe-base-amounts">
+                <h3 class="recipe-section-title">${currentLanguage === 'ja'
+                    ? (recipe.ingredient_section_title_ja || '基本分量')
+                    : (recipe.ingredient_section_title_ne || 'आधारभूत मात्रा')}</h3>
+                <p class="recipe-base-intro">${intro}</p>
+                <div class="recipe-amount-grid">
+                    ${recipe.base_amounts.map(item => `
+                        <div class="recipe-amount-card">
+                            <span>${currentLanguage === 'ja' ? item.label_ja : item.label_ne}</span>
+                            <strong>${currentLanguage === 'ja' ? item.value_ja : item.value_ne}</strong>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    }
+
     // 📝 材料セクション
     if (recipe.ingredients && recipe.ingredients.length > 0) {
         html += `
             <div class="recipe-section">
-                <h3 class="recipe-section-title">${currentLanguage === 'ja' ? '材料' : 'सामग्री'}</h3>
+                <h3 class="recipe-section-title">${currentLanguage === 'ja'
+                    ? (recipe.ingredient_section_title_ja || '材料')
+                    : (recipe.ingredient_section_title_ne || 'सामग्री')}</h3>
                 <ul class="recipe-list">
         `;
         
@@ -767,6 +797,21 @@ function showRecipeDetail(type, index) {
         });
         html += `</ul></div>`;
     }
+
+    // 個数別の分量は、基本分量より控えめな早見表として分離
+    if (recipe.dosage_examples && recipe.dosage_examples.length > 0) {
+        const dosageNote = currentLanguage === 'ja' ? recipe.dosage_note_ja : recipe.dosage_note_ne;
+        html += `
+            <div class="recipe-dosage-guide">
+                <p class="recipe-dosage-note">${dosageNote}</p>
+                <ul>
+                    ${recipe.dosage_examples.map(item => `
+                        <li>${currentLanguage === 'ja' ? item.text_ja : item.text_ne}</li>
+                    `).join('')}
+                </ul>
+            </div>
+        `;
+    }
     
     // 👨‍🍳 作り方セクション
     if (recipe.instructions && recipe.instructions.length > 0) {
@@ -784,6 +829,35 @@ function showRecipeDetail(type, index) {
             `;
         });
         html += `</ul></div>`;
+    }
+
+    // メイン手順を邪魔しない、折りたたみ式の詳しい補足
+    if (recipe.additional_info) {
+        const info = recipe.additional_info;
+        const infoTitle = currentLanguage === 'ja' ? info.title_ja : info.title_ne;
+        const infoText = item => currentLanguage === 'ja' ? item.text_ja : item.text_ne;
+        html += `
+            <details class="recipe-additional-info">
+                <summary>${infoTitle}</summary>
+                <div class="recipe-additional-info-body">
+                    ${info.intro.map(item => `<p>${infoText(item)}</p>`).join('')}
+                    ${info.sections.map(section => {
+                        const sectionTitle = currentLanguage === 'ja' ? section.title_ja : section.title_ne;
+                        const sectionItems = currentLanguage === 'ja' ? section.items_ja : section.items_ne;
+                        const sectionNote = currentLanguage === 'ja' ? section.note_ja : section.note_ne;
+                        const sectionExtraNote = currentLanguage === 'ja' ? section.extra_note_ja : section.extra_note_ne;
+                        return `
+                            <section>
+                                <h4>${sectionTitle}</h4>
+                                <ul>${sectionItems.map(item => `<li>${item}</li>`).join('')}</ul>
+                                ${sectionNote ? `<p class="recipe-additional-note">${sectionNote}</p>` : ''}
+                                ${sectionExtraNote ? `<p class="recipe-additional-note">${sectionExtraNote}</p>` : ''}
+                            </section>
+                        `;
+                    }).join('')}
+                </div>
+            </details>
+        `;
     }
 
     // ⚠️ 補足・備考セクション
