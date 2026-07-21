@@ -784,9 +784,10 @@ function showRecipeDetail(type, index) {
         recipe.ingredients.forEach((item, i) => {
             // 計算ラベルがあるレシピの時だけ、計算用の赤文字スペースを作る
             const hasCalc = !!recipe.calc_base_label_ja;
+            const itemClass = item.kind ? `recipe-list-item--${item.kind}` : '';
 
             html += `
-                <li style="display: flex; justify-content: space-between; align-items: center;">
+                <li class="${itemClass}" style="display: flex; justify-content: space-between; align-items: center;">
                     <div>
                         <div class="recipe-text-ja">${formatMenuAnnotations(item.text_ja)}</div>
                         ${item.text_ne ? `<div class="recipe-text-ne">${formatMenuAnnotations(item.text_ne)}</div>` : ''}

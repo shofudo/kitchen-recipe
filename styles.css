@@ -1175,16 +1175,43 @@ body.lightbox-open {
 }
 
 .recipe-list li {
-    padding: 9px 13px;
-    background-color: rgba(255, 255, 255, 0.56);
-    margin-bottom: 5px;
-    border-radius: 6px;
-    border: 1px solid rgba(149, 130, 107, 0.18);
-    border-left: 3px solid var(--success-color);
+    padding: 9px 0;
+    margin: 0;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid rgba(149, 130, 107, 0.14);
+    border-radius: 0;
 }
 
 .recipe-list li:last-child {
-    margin-bottom: 0;
+    border-bottom: 0;
+}
+
+.recipe-list .recipe-list-item--group {
+    padding-top: 16px;
+    padding-bottom: 4px;
+    border-bottom: 0;
+    color: var(--accent-color);
+    font-weight: 700;
+}
+
+.recipe-list .recipe-list-item--group:first-child {
+    padding-top: 4px;
+}
+
+.recipe-list .recipe-list-item--note {
+    padding: 2px 0 7px;
+    border-bottom: 0;
+    color: var(--text-light);
+}
+
+.recipe-list-item--note .recipe-text-ja,
+.recipe-list-item--note .recipe-text-ne {
+    font-size: 0.82rem;
+}
+
+.recipe-list-item--note .recipe-text-ja::before {
+    content: "※";
 }
 
 .recipe-text-ja {
@@ -1532,8 +1559,7 @@ body.lightbox-open {
     }
 
     .recipe-list li {
-        padding: 14px;
-        border-radius: 10px;
+        padding: 12px 0;
     }
 
     .scroll-to-top {
@@ -1739,8 +1765,8 @@ body.lightbox-open {
     }
 
     .recipe-list li {
-        padding: 11px 12px;
-        margin-bottom: 8px;
+        padding: 10px 0;
+        margin: 0;
     }
 
     .recipe-text-ja {
